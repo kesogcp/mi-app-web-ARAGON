@@ -1,0 +1,2590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="PARAGON 60D" />
+  <meta name="theme-color" content="#090D16" />
+  <title>PARAGON OS v2.0 · Entrenadora Integral 60 Días</title>
+
+  <style>
+    :root {
+      --bg-main: #090D16;
+      --bg-card: #111827;
+      --bg-elevated: #1E293B;
+      --bg-input: #060911;
+      --border: #1F2937;
+      --border-light: #334155;
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --gold: #F59E0B;
+      --gold-bg: rgba(245, 158, 11, 0.14);
+      --emerald: #10B981;
+      --emerald-bg: rgba(16, 185, 129, 0.14);
+      --cyan: #06B6D4;
+      --cyan-bg: rgba(6, 182, 212, 0.14);
+      --rose: #F43F5E;
+      --rose-bg: rgba(244, 63, 94, 0.15);
+      --purple: #A855F7;
+      --purple-bg: rgba(168, 85, 247, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.48;
+      padding-bottom: calc(96px + env(safe-area-inset-bottom));
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    #quicklook-warning {
+      background: linear-gradient(90deg, #991B1B, #7F1D1D);
+      color: #FFFFFF;
+      padding: 12px 16px;
+      font-size: 12px;
+      border-bottom: 2px solid #F87171;
+      text-align: center;
+    }
+
+    /* Save Toast Notification */
+    #save-toast {
+      position: fixed;
+      top: max(14px, env(safe-area-inset-top));
+      right: 14px;
+      z-index: 90;
+      background: rgba(6, 78, 59, 0.96);
+      color: #6EE7B7;
+      border: 1px solid #10B981;
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 800;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    #save-toast.show {
+      opacity: 1;
+    }
+
+    /* Header */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(9, 13, 22, 0.95);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: max(10px, env(safe-area-inset-top)) 14px 10px 14px;
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .row-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #F59E0B, #B45309);
+      color: #090D16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 19px;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
+    }
+
+    .title-main {
+      font-size: 15.5px;
+      font-weight: 800;
+      margin: 0;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+    }
+
+    .subtitle-main {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin: 1px 0 0 0;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-emerald { background: var(--emerald-bg); color: #34D399; border: 1px solid rgba(16,185,129,0.3); }
+    .badge-gold { background: var(--gold-bg); color: #FBBF24; border: 1px solid rgba(245,158,11,0.3); }
+    .badge-cyan { background: var(--cyan-bg); color: #22D3EE; border: 1px solid rgba(6,182,212,0.3); }
+    .badge-rose { background: var(--rose-bg); color: #FB7185; border: 1px solid rgba(244,63,94,0.3); }
+    .badge-purple { background: var(--purple-bg); color: #C084FC; border: 1px solid rgba(168,85,247,0.3); }
+
+    .header-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 580px) {
+      .header-controls {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .control-bar {
+      background: #0D1322;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      transition: transform 0.12s ease, opacity 0.15s ease;
+    }
+    button:active {
+      transform: scale(0.96);
+    }
+
+    .btn-emerald {
+      background: var(--emerald);
+      color: #052E16;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 7px 11px;
+      border-radius: 9px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: #090D16;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 7px 11px;
+      border-radius: 9px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-cyan {
+      background: var(--cyan);
+      color: #083344;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 7px 11px;
+      border-radius: 9px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-rose {
+      background: var(--rose);
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 7px 11px;
+      border-radius: 9px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-dark {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      border: 1px solid var(--border-light);
+      font-weight: 700;
+      font-size: 11.5px;
+      padding: 6px 10px;
+      border-radius: 9px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-light);
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .input-time, .input-num, .select-voice {
+      background: var(--bg-input);
+      color: #34D399;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 5px 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Floating Timer & Coach Live Subtitle Bar */
+    .timer-bar {
+      position: sticky;
+      top: 105px;
+      z-index: 35;
+      background: rgba(17, 24, 39, 0.97);
+      border-bottom: 2px solid var(--gold);
+      padding: 8px 14px;
+    }
+
+    .coach-subtitle-bar {
+      position: fixed;
+      bottom: calc(64px + env(safe-area-inset-bottom));
+      left: 10px;
+      right: 10px;
+      max-width: 760px;
+      margin: 0 auto;
+      z-index: 50;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 27, 75, 0.98));
+      border: 1.5px solid var(--gold);
+      border-radius: 14px;
+      padding: 10px 13px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    .main-area {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 12px 14px;
+    }
+
+    .banner {
+      background: linear-gradient(135deg, #111827 0%, #0F172A 65%, #064E3B 100%);
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .banner-purple {
+      background: linear-gradient(135deg, #111827 0%, #1E1B4B 65%, #3B0764 100%);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .banner-gold {
+      background: linear-gradient(135deg, #111827 0%, #1F2937 60%, #451A03 100%);
+      border: 1px solid rgba(245, 158, 11, 0.38);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 11px;
+      overflow: hidden;
+    }
+
+    .card-done {
+      border-color: rgba(16, 185, 129, 0.55);
+      background: linear-gradient(180deg, rgba(6, 78, 59, 0.16), rgba(17, 24, 39, 0.95));
+    }
+
+    .card-header {
+      padding: 13px 14px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .check-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      border: 2px solid #475569;
+      background: transparent;
+      color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .check-btn.active {
+      background: var(--emerald);
+      border-color: var(--emerald);
+      color: #052E16;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin: 4px 0;
+      line-height: 1.32;
+    }
+
+    .card-title.done {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .card-summary {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: 3px 0 0 0;
+    }
+
+    .accordion-body {
+      border-top: 1px solid var(--border);
+      background: #0B0F19;
+      padding: 13px;
+    }
+
+    .step-script-box {
+      background: linear-gradient(180deg, #111827, #0D1322);
+      border-left: 3px solid var(--gold);
+      border-radius: 10px;
+      padding: 11px 12px;
+      margin-bottom: 10px;
+      font-size: 12.5px;
+      color: #F1F5F9;
+      line-height: 1.55;
+    }
+
+    .q-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .q-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .q-box {
+      background: #111827;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 9px 10px;
+      font-size: 12px;
+    }
+
+    .q-label {
+      font-size: 10px;
+      font-weight: 800;
+      display: block;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .grid-10 {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 5px;
+    }
+
+    @media (max-width: 560px) {
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .grid-10 {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+
+    .day-cell {
+      padding: 7px 2px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 800;
+      background: #0F172A;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .day-cell.current {
+      border: 2px solid var(--gold);
+      color: #FFFFFF;
+      background: rgba(245, 158, 11, 0.2);
+    }
+
+    .day-cell.completed {
+      background: rgba(16, 185, 129, 0.22);
+      border-color: var(--emerald);
+      color: #34D399;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: #1E293B;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #06B6D4, #10B981);
+      transition: width 0.3s ease;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 45;
+      background: rgba(9, 13, 22, 0.96);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      padding: 6px 8px calc(6px + env(safe-area-inset-bottom)) 8px;
+    }
+
+    .nav-grid {
+      max-width: 780px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+    }
+
+    .nav-item {
+      background: transparent;
+      color: var(--text-muted);
+      padding: 6px 2px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .nav-item.active {
+      color: var(--gold);
+      background: rgba(245, 158, 11, 0.12);
+    }
+
+    .nav-icon {
+      font-size: 17px;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- AVISO AUTOMÁTICO SI SE ABRE EN EL VISOR BÁSICO DE ARCHIVOS DE APPLE -->
+  <div id="quicklook-warning">
+    ⚠️ <b>Estás en la vista previa básica de Apple.</b> Súbelo en <b>app.netlify.com/drop</b> o ábrelo en la app <b>Documents</b> para activar los botones y la voz.
+  </div>
+
+  <!-- INDICADOR FLOTANTE DE GUARDADO EN 4 CAPAS -->
+  <div id="save-toast" class="mono">✓ Guardado en 4 Capas</div>
+
+  <!-- ENCABEZADO SUPERIOR CON CONTADOR DE DÍA, SEMANA Y MES -->
+  <header class="app-header">
+    <div class="container">
+      <div class="row-between">
+        <div class="brand-box">
+          <div class="brand-icon">🦁</div>
+          <div>
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+              <h1 class="title-main">PARAGON OS v2.0</h1>
+              <span id="header-month-week-badge" class="badge badge-cyan mono">MES 1 · SEMANA 1</span>
+              <span id="header-weekday-badge" class="badge badge-purple mono">HOY</span>
+            </div>
+            <p class="subtitle-main">Entrenadora Personal Segundo a Segundo · 100% Guardado Automático</p>
+          </div>
+        </div>
+
+        <!-- Selector de Día 1 a 60 -->
+        <div class="control-bar" style="padding: 4px 8px;">
+          <button class="btn-dark" style="padding:4px 8px;" onclick="App.changeProgramDay(-1)">◀</button>
+          <div style="text-align:center; min-width:74px;">
+            <span style="font-size:9px; color:var(--text-muted); display:block; text-transform:uppercase;">Día Actual</span>
+            <span id="header-day-label" class="mono" style="font-size:12.5px; font-weight:900; color:var(--gold);">DÍA 1 / 60</span>
+          </div>
+          <button class="btn-dark" style="padding:4px 8px;" onclick="App.changeProgramDay(1)">▶</button>
+        </div>
+      </div>
+
+      <!-- Barra T+0 y Selector de Turno -->
+      <div class="header-controls">
+        <div class="control-bar">
+          <button class="btn-emerald" onclick="App.triggerWakeUpNow()">☀️ ¡Desperté Ahora! (T+0)</button>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <span style="font-size:11px; color:var(--text-muted);">T+0:</span>
+            <input id="wake-time-input" type="time" class="input-time mono" value="07:00" onchange="App.setCustomWakeTime(this.value)" />
+          </div>
+        </div>
+
+        <div class="control-bar">
+          <span style="font-size:11px; color:var(--text-muted); font-weight:600;">Turno Gym Hoy:</span>
+          <div style="display:flex; gap:5px;">
+            <button id="btn-shift-am" class="btn-gold" onclick="App.setGymShift('AM')">10:00 AM</button>
+            <button id="btn-shift-pm" class="btn-dark" onclick="App.setGymShift('PM')">07:00 PM</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CRONÓMETRO FLOTANTE ACTIVO -->
+  <div id="floating-timer-bar" class="timer-bar hidden">
+    <div class="container row-between">
+      <div>
+        <div id="timer-title" style="font-weight:800; font-size:13px; color:#FFFFFF;">⏱️ Cronómetro Activo</div>
+        <div id="timer-subtitle" style="font-size:11px; color:var(--text-muted);">Mantén la técnica estricta</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span id="timer-display" class="mono" style="font-size:20px; font-weight:900; color:var(--gold);">00:15</span>
+        <button class="btn-rose" onclick="App.stopActiveTimer()">Detener</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BARRA FLOTANTE DE SUBTÍTULOS EN VIVO DE LA ENTRENADORA -->
+  <div id="coach-subtitle-bar" class="coach-subtitle-bar hidden">
+    <div class="row-between" style="margin-bottom:4px;">
+      <span class="badge badge-gold mono">🎙️ ENTRENADORA PERSONAL EN VIVO</span>
+      <button class="btn-rose" style="padding:3px 8px; font-size:10px;" onclick="App.stopSpeech()">🔇 Callar Voz</button>
+    </div>
+    <div id="coach-subtitle-text" style="font-size:13px; font-weight:600; color:#FFFFFF; line-height:1.45;"></div>
+  </div>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="main-area">
+
+    <!-- =================================================================== -->
+    <!-- PESTAÑA 1: MI DÍA PASO A PASO (LOS 12 BLOQUES INTEGRADOS + AGUA)    -->
+    <!-- =================================================================== -->
+    <section id="tab-daily">
+
+      <!-- Resumen Inteligente del Día de Hoy (Qué toca hoy según el día de la semana) -->
+      <div class="banner">
+        <div class="row-between" style="margin-bottom:6px;">
+          <span id="today-special-pills" style="display:flex; gap:5px; flex-wrap:wrap;"></span>
+          <span id="daily-completion-pill" class="badge badge-gold mono">0 / 12 Pasos</span>
+        </div>
+        <p style="margin:0 0 8px 0; font-size:12px; color:#E2E8F0;">
+          Aquí tienes <b>absolutamente todo tu día integrado en 12 pasos</b> (incluyendo lavado facial, protector solar, labios, higiene íntima con Dexpantenol, agua exacta, clínica, gimnasio y cena). Toca el botón <b>🔊 Entrenadora</b> en cualquier paso para que te guíe con ejemplos segundo a segundo.
+        </p>
+
+        <!-- Selector rápido de Voz de Entrenadora -->
+        <div class="control-bar" style="background:rgba(6,9,17,0.75); flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="font-size:11px; font-weight:700; color:var(--gold);">👩🏻‍⚕️ Voz Entrenadora:</span>
+            <select id="voice-select" class="select-voice" style="max-width:190px;" onchange="App.changeVoiceSelection(this.value)"></select>
+          </div>
+          <div style="display:flex; align-items:center; gap:5px;">
+            <span style="font-size:11px; color:var(--text-muted);">Velocidad:</span>
+            <button id="rate-09" class="btn-dark" style="padding:3px 7px;" onclick="App.setSpeechRate(0.92)">0.9x</button>
+            <button id="rate-10" class="btn-gold" style="padding:3px 7px;" onclick="App.setSpeechRate(1.0)">1.0x</button>
+            <button id="rate-11" class="btn-dark" style="padding:3px 7px;" onclick="App.setSpeechRate(1.08)">1.1x</button>
+            <button class="btn-emerald" style="padding:4px 8px;" onclick="App.testCoachVoice()">▶️ Probar Voz</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEDIDOR INTERACTIVO DE AGUA DIARIA (META: 3,500 ML) -->
+      <div class="card" style="padding:13px 14px; border-color: rgba(6, 182, 212, 0.4);">
+        <div class="row-between">
+          <div>
+            <span class="badge badge-cyan mono">Hidratación Celular, Renal y Vocal</span>
+            <h3 style="font-size:14px; font-weight:800; margin:3px 0 0 0;">
+              Contador de Agua de Hoy: <span id="water-current-label" class="mono" style="color:var(--cyan);">0</span> / <span class="mono">3500 ml</span>
+            </h3>
+          </div>
+          <div style="display:flex; gap:5px; flex-wrap:wrap;">
+            <button class="btn-cyan" onclick="App.addWater(250)">+250 ml (1 Vaso)</button>
+            <button class="btn-emerald" onclick="App.addWater(600)">+600 ml (Shot/Gym)</button>
+            <button class="btn-dark" onclick="App.addWater(-250)">-250</button>
+          </div>
+        </div>
+        <div class="progress-track">
+          <div id="water-progress-bar" class="progress-fill"></div>
+        </div>
+        <p style="font-size:11px; color:var(--text-muted); margin:6px 0 0 0;">
+          💧 <b>Regla de Oro:</b> Toma el 85% de tu agua entre T+15 min y las 07:30 PM. En la cena solo toma los 250 ml del escudo de chía para no diluir jugos gástricos ni sufrir reflujo nocturno.
+        </p>
+      </div>
+
+      <!-- Contenedor de los 12 Pasos Maestros del Día -->
+      <div id="daily-blocks-container"></div>
+
+      <!-- DECODIFICADOR DE CENA FAMILIAR NOCTURNA -->
+      <div class="card" style="border-color: rgba(245, 158, 11, 0.45); padding: 14px; margin-top: 16px;">
+        <div class="row-between" style="margin-bottom:8px;">
+          <div>
+            <span class="badge badge-gold mono">Mitigación Nocturna · Hígado y Vesícula</span>
+            <h2 style="font-size:15px; font-weight:800; margin:4px 0 0 0;">Decodificador de Cena Familiar (10:00 PM – 11:00 PM)</h2>
+          </div>
+          <button class="btn-gold" onclick="App.startCountdown(600, 'Flexiones de Sóleo Sentado (SPU)', 'Eleva talones cada 1.5-2s en la sobremesa (-52% glucosa)')">
+            ▶️ SPU 10 min
+          </button>
+        </div>
+
+        <div class="grid-4" style="margin-bottom:10px;">
+          <button id="btn-dinner-tacos" class="btn-gold" style="justify-content:center;" onclick="App.selectDinnerScenario('tacos')">🥩 Carne / Tacos</button>
+          <button id="btn-dinner-caldo" class="btn-dark" style="justify-content:center;" onclick="App.selectDinnerScenario('caldo')">🍲 Pollo / Caldo</button>
+          <button id="btn-dinner-guisado" class="btn-dark" style="justify-content:center;" onclick="App.selectDinnerScenario('guisado')">🥘 Guisados</button>
+          <button id="btn-dinner-antojitos" class="btn-dark" style="justify-content:center;" onclick="App.selectDinnerScenario('antojitos')">🌮 Antojitos</button>
+        </div>
+
+        <div id="dinner-decoder-output" class="q-box" style="background:#060911;"></div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PESTAÑA 2: GIMNASIO BIOMECÁNICO PPL + CUELLO/MANDÍBULA              -->
+    <!-- =================================================================== -->
+    <section id="tab-gym" class="hidden">
+      <div class="banner" style="background: linear-gradient(135deg, #111827 0%, #0F172A 60%, #164E63 100%);">
+        <div class="row-between" style="margin-bottom:6px;">
+          <span class="badge badge-cyan mono">Stretch-Mediated Hypertrophy (2021-2025)</span>
+          <span class="badge badge-emerald mono">Doble Progresión Activa</span>
+        </div>
+        <h2 style="font-size:16px; font-weight:800; margin:4px 0;">Gimnasio Biomecánico PPL + Cuello y Mandíbula</h2>
+        <p style="font-size:12px; color:#CBD5E1; margin:0 0 12px 0;">
+          Toca <b>🔊 Entrenadora</b> en cada ejercicio para escuchar cómo colocar el cuerpo, cuántos segundos bajar y cómo hacer la pausa en estiramiento profundo.
+        </p>
+
+        <div class="grid-3">
+          <button id="btn-gym-A" class="btn-cyan" style="flex-direction:column; padding:9px 6px;" onclick="App.selectGymDay('A')">
+            <span>DÍA A · EMPUJE</span>
+            <span style="font-size:10px; font-weight:500; opacity:0.85;">Pecho, Hombro, Tríceps, Cuello</span>
+          </button>
+          <button id="btn-gym-B" class="btn-dark" style="flex-direction:column; padding:9px 6px;" onclick="App.selectGymDay('B')">
+            <span>DÍA B · JALE</span>
+            <span style="font-size:10px; font-weight:500; opacity:0.85;">Espalda V, Postura, Bíceps</span>
+          </button>
+          <button id="btn-gym-C" class="btn-dark" style="flex-direction:column; padding:9px 6px;" onclick="App.selectGymDay('C')">
+            <span>DÍA C · PIERNA</span>
+            <span style="font-size:10px; font-weight:500; opacity:0.85;">Isquios, Cuádriceps, Pantorrilla</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="gym-exercises-container"></div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PESTAÑA 3: CALENDARIO MAESTRO DE DÍAS (60), SEMANAS (8) Y MESES (2) -->
+    <!-- =================================================================== -->
+    <section id="tab-calendar" class="hidden">
+      <div class="banner-purple">
+        <div class="row-between" style="margin-bottom:6px;">
+          <span class="badge badge-purple mono">Mapa Maestro de 60 Días · 8 Semanas · 2 Meses</span>
+          <span id="calendar-progress-badge" class="badge badge-emerald mono">DÍA 1 DE 60</span>
+        </div>
+        <h2 style="font-size:15.5px; font-weight:800; margin:4px 0;">Control Exacto por Día, Semana y Mes</h2>
+        <p style="font-size:12px; color:#E2E8F0; margin:0;">
+          Toca cualquier número del <b>1 al 60</b> para ir a ese día. Los días en verde ya tienen tareas completadas. Abajo tienes tu checklist semanal de domingo y tus procedimientos mensuales de clínica.
+        </p>
+      </div>
+
+      <!-- Selector del Día de la Semana para sincronizar el calendario real -->
+      <div class="card" style="padding:13px;">
+        <div class="row-between">
+          <span style="font-size:12px; font-weight:700;">📅 Día de la Semana de Hoy (Sincroniza Tretinoína, Ketoconazol y Boro):</span>
+          <select id="weekday-override-select" class="select-voice" onchange="App.setWeekdayOverride(this.value)">
+            <option value="auto">Automático (Reloj del iPhone)</option>
+            <option value="1">Lunes (Recuperación + Boro + Gym A)</option>
+            <option value="2">Martes (Tretinoína + Ketoconazol 2% + Boro + Gym B)</option>
+            <option value="3">Miércoles (Recuperación + Boro + Gym C)</option>
+            <option value="4">Jueves (Tretinoína + Boro + Gym A)</option>
+            <option value="5">Viernes (Recuperación + Ketoconazol 2% + Boro + Gym B)</option>
+            <option value="6">Sábado (Tretinoína + Descanso Boro + Gym C)</option>
+            <option value="0">Domingo (Recuperación + Descanso Boro + Check-in Semanal)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Cuadrícula de los 60 Días dividida en Mes 1 y Mes 2 -->
+      <div class="card" style="padding:14px;">
+        <span class="badge badge-gold mono">MES 1 · DÍAS 1 AL 30 (FASE DE RECOMPOSICIÓN Y RETINIZACIÓN)</span>
+        <div id="grid-month-1" class="grid-10" style="margin-top:8px; margin-bottom:14px;"></div>
+
+        <span class="badge badge-cyan mono">MES 2 · DÍAS 31 AL 60 (FASE DE HIPERTROFIA MÁXIMA Y DEFINICIÓN 3D)</span>
+        <div id="grid-month-2" class="grid-10" style="margin-top:8px;"></div>
+      </div>
+
+      <!-- PROTOCOLO SEMANAL (CADA DOMINGO) -->
+      <div class="card" style="padding:14px;">
+        <div class="row-between" style="margin-bottom:8px;">
+          <div>
+            <span class="badge badge-emerald mono">Checklist Semanal · Semanas 1 a 8</span>
+            <h3 style="font-size:14.5px; font-weight:800; margin:3px 0 0 0;">Ritual Dominical de Mantenimiento y Medición (Cada 7 Días)</h3>
+          </div>
+          <button class="btn-icon" onclick="App.speakText('Protocolo de cada domingo. Primero: pésate y mide tu cintura umbilical en ayunas después de ir al baño e ingrésalo en la pestaña de laboratorios. Segundo: frente al espejo con buena luz, limpia únicamente los vellos del entrecejo y los vellos sueltos debajo de la cola de tus cejas manteniendo la ceja recta y masculina. Tercero: recorta uñas de manos al ras quirúrgico, exfolia brazos y hombros, y deja cocido y refrigerado tu arroz blanco de la semana para formar almidón resistente tipo tres.')">🔊</button>
+        </div>
+        <div id="weekly-tasks-container"></div>
+      </div>
+
+      <!-- PROTOCOLO MENSUAL Y QUINCENAL EN CLÍNICA (DÍAS 1, 15, 30, 45 Y 60) -->
+      <div class="card" style="padding:14px;">
+        <div class="row-between" style="margin-bottom:8px;">
+          <div>
+            <span class="badge badge-purple mono">Inversión de Alto Impacto · Mes 1 y Mes 2</span>
+            <h3 style="font-size:14.5px; font-weight:800; margin:3px 0 0 0;">Calendario de Procedimientos en Clínica y Estética</h3>
+          </div>
+          <button class="btn-icon" onclick="App.speakText('Calendario mensual de procedimientos clínicos. En el día uno y en el día treinta y cinco de tu transformación, agenda tu sesión en clínica dermatológica de Dermapen cuatro a uno punto cinco milímetros con exosomas, o un Hydrafacial con ácido salicílico para cerrar poros e inducir colágeno nuevo. Cada quince días, en los días quince, treinta, cuarenta y cinco y sesenta, realiza tu corte de cabello con desvanecido limpio en los lados para cuadrar tu estructura craneofacial.')">🔊</button>
+        </div>
+        <div id="monthly-tasks-container"></div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PESTAÑA 4: DERMATOLOGÍA ESPECIALIZADA, CITA VIP Y FONIATRÍA         -->
+    <!-- =================================================================== -->
+    <section id="tab-derma" class="hidden">
+      <div class="banner-gold">
+        <div class="row-between" style="margin-bottom:6px;">
+          <div>
+            <span class="badge badge-gold mono">Protocolos Especiales y Emergencia Vocal</span>
+            <h2 style="font-size:15px; font-weight:800; margin:4px 0 0 0;">Manual de Rasurado 3 Pasadas, Cita VIP / Albercada y Voz</h2>
+          </div>
+          <button class="btn-rose" onclick="App.speakText('Atención Doctor. Prohibido carraspear. Si sientes moco en este instante, exhala fuerte con la boca abierta haciendo una H sorda sin sonido, toma un sorbo de agua y traga apretando con fuerza los músculos de tu garganta.')">
+            🚨 ¡Siento Moco Ahora!
+          </button>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;">
+          <button class="btn-gold" onclick="App.startCountdown(1200, 'Espera Pre-Tretinoína (20 Minutos)', 'Piel 100% seca antes de aplicar 0.25g de Ácido Retinoico')">
+            ⏱️ Espera 20m Tretinoína
+          </button>
+          <button class="btn-dark" onclick="App.startCountdown(300, 'Ketoconazol 2% en Cuero Cabelludo (5 Minutos)', 'Masajea y deja actuar 5 min antes de enjuagar')">
+            🚿 Ketoconazol (5m)
+          </button>
+          <button class="btn-dark" onclick="App.startCountdown(60, 'Peróxido de Benzoilo en Axilas (60 Segundos)', 'Déjalo actuar 60s en axilas y enjuaga bien')">
+            🧼 Axilas (60s)
+          </button>
+        </div>
+      </div>
+
+      <!-- Entrenador Rítmico de Suelo Pélvico Masculino -->
+      <div class="card" style="padding:14px;">
+        <div class="row-between">
+          <div>
+            <span class="badge badge-emerald mono">Urología Funcional · Rigidez y Control</span>
+            <h3 style="font-size:14px; font-weight:800; margin:4px 0 0 0;">Entrenador Guiado de Suelo Pélvico Kegel (3 × 10 Reps)</h3>
+          </div>
+          <button id="btn-kegel-start" class="btn-emerald" onclick="App.toggleKegelTrainer()">▶️ Iniciar Serie Guiada</button>
+        </div>
+        <div class="q-box" style="margin-top:10px; text-align:center; background:#060911;">
+          <div id="kegel-phase-text" style="font-weight:700; font-size:12px; color:#CBD5E1;">
+            Listo: 3s Contracción Firme (Bulbocavernoso) + 5s Kegel Inverso (Relajación Perineal)
+          </div>
+          <div class="progress-track">
+            <div id="kegel-progress-bar" class="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="derma-cards-container"></div>
+      <div id="voice-cards-container"></div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- PESTAÑA 5: CONSOLA NEURO-ACÚSTICA (40 HZ + MILITAR) Y BIOMETRÍA      -->
+    <!-- =================================================================== -->
+    <section id="tab-biometrics" class="hidden">
+      <div class="banner-gold">
+        <div class="row-between" style="margin-bottom:6px;">
+          <div>
+            <span class="badge badge-gold mono">Sintetizador WebAudio en Vivo</span>
+            <h2 style="font-size:15px; font-weight:800; margin:4px 0 0 0;">Consola Neuro-Acústica Gamma 40 Hz + Comandante</h2>
+          </div>
+          <span id="audio-engine-badge" class="badge badge-cyan mono">STANDBY</span>
+        </div>
+
+        <div class="grid-3" style="margin-bottom:10px; margin-top:8px;">
+          <button id="btn-gamma-toggle" class="btn-gold" style="justify-content:center;" onclick="App.toggleGammaEngine()">
+            ⚡ <span id="gamma-btn-text">Activar Pulso 40 Hz</span>
+          </button>
+          <button class="btn-rose" style="justify-content:center;" onclick="App.triggerMilitaryCommand()">
+            🎖️ Motivación Ahora
+          </button>
+          <button class="btn-dark" style="justify-content:center;" onclick="App.stopSpeech()">
+            🔇 Silenciar Voz
+          </button>
+        </div>
+
+        <div id="commander-log" class="q-box mono" style="background:#060911; color:#FDE68A;">
+          "Respeta cada segundo de pausa en estiramiento profundo y cada gramo de tu protocolo: ahí es donde se construye el hombre que todos respetan."
+        </div>
+      </div>
+
+      <!-- MÓDULO BIOMÉTRICO Y DE LABORATORIOS -->
+      <div class="card" style="padding:15px;">
+        <span class="badge badge-emerald mono">Pilar 8 · Algoritmo Clínico Autoadaptativo</span>
+        <h2 style="font-size:15px; font-weight:800; margin:4px 0;">Evolución Biométrica y Exámenes de Sangre</h2>
+        <p style="font-size:12px; color:var(--text-muted); margin:0 0 12px 0;">
+          Modifica tus valores actuales. El algoritmo recalcula al instante tus gramos de arroz, avena, tortillas y proteína en tu Día a Día.
+        </p>
+
+        <div class="grid-3" style="margin-bottom:12px;">
+          <div class="q-box">
+            <label style="font-size:10px; color:var(--text-muted); display:block;">Peso Corporal (kg)</label>
+            <input id="bio-weight" type="number" step="0.1" class="input-num mono" style="width:100%; margin-top:4px;" onchange="App.saveBiometrics()" />
+          </div>
+          <div class="q-box">
+            <label style="font-size:10px; color:var(--text-muted); display:block;">Cintura Umbilical (cm)</label>
+            <input id="bio-waist" type="number" step="0.5" class="input-num mono" style="width:100%; margin-top:4px;" onchange="App.saveBiometrics()" />
+          </div>
+          <div class="q-box">
+            <label style="font-size:10px; color:var(--text-muted); display:block;">Glucosa Ayunas (mg/dL)</label>
+            <input id="bio-glucose" type="number" class="input-num mono" style="width:100%; margin-top:4px;" onchange="App.saveBiometrics()" />
+          </div>
+          <div class="q-box">
+            <label style="font-size:10px; color:var(--text-muted); display:block;">Triglicéridos (mg/dL)</label>
+            <input id="bio-trig" type="number" class="input-num mono" style="width:100%; margin-top:4px;" onchange="App.saveBiometrics()" />
+          </div>
+          <div class="q-box">
+            <label style="font-size:10px; color:var(--text-muted); display:block;">ALT / TGP Hepática (U/L)</label>
+            <input id="bio-alt" type="number" class="input-num mono" style="width:100%; margin-top:4px;" onchange="App.saveBiometrics()" />
+          </div>
+          <div class="q-box">
+            <label style="font-size:10px; color:var(--text-muted); display:block;">Vitamina D 25-OH (ng/mL)</label>
+            <input id="bio-vitd" type="number" class="input-num mono" style="width:100%; margin-top:4px;" onchange="App.saveBiometrics()" />
+          </div>
+        </div>
+
+        <div id="biometric-prescription-box" class="q-box" style="border-color: rgba(16,185,129,0.4); background:#060911;"></div>
+      </div>
+
+      <!-- RESPALDO 4 CAPAS -->
+      <div class="card" style="padding:15px;">
+        <span class="badge badge-cyan mono">Pilar 9 · Persistencia Cuádruple iOS Verificada</span>
+        <h3 style="font-size:14px; font-weight:800; margin:4px 0 8px 0;">Respaldo Permanente (localStorage + window.name + IndexedDB + JSON)</h3>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn-emerald" onclick="App.exportBackupJSON()">💾 Descargar / Copiar Respaldo JSON</button>
+          <button class="btn-dark" onclick="App.importBackupPrompt()">📂 Restaurar desde JSON</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BARRA DE NAVEGACIÓN INFERIOR -->
+  <nav class="bottom-nav">
+    <div class="nav-grid">
+      <button id="nav-daily" class="nav-item active" onclick="App.switchTab('daily')">
+        <span class="nav-icon">☀️</span>
+        <span>Día a Día</span>
+      </button>
+      <button id="nav-gym" class="nav-item" onclick="App.switchTab('gym')">
+        <span class="nav-icon">🏋️‍♂️</span>
+        <span>Gym PPL</span>
+      </button>
+      <button id="nav-calendar" class="nav-item" onclick="App.switchTab('calendar')">
+        <span class="nav-icon">📅</span>
+        <span>60 Días/Mes</span>
+      </button>
+      <button id="nav-derma" class="nav-item" onclick="App.switchTab('derma')">
+        <span class="nav-icon">✨</span>
+        <span>Piel/Voz/VIP</span>
+      </button>
+      <button id="nav-biometrics" class="nav-item" onclick="App.switchTab('biometrics')">
+        <span class="nav-icon">📊</span>
+        <span>Audio/Labs</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOTOR JAVASCRIPT INTEGRADO -->
+  <script>
+    const qlWarn = document.getElementById('quicklook-warning');
+    if (qlWarn) qlWarn.style.display = 'none';
+
+    const STORAGE_KEY = 'PARAGON_OS_MASTER_V2';
+    const LEGACY_KEY = 'PARAGON_OS_MASTER_V1';
+    const DB_NAME = 'ParagonDB_v2';
+    const STORE_NAME = 'stateStore';
+
+    // =========================================================================
+    // 1. PERSISTENCIA CUÁDRUPLE CON CONFIRMACIÓN VISUAL
+    // =========================================================================
+    const ParagonStorage = {
+      isHydrated: false,
+      db: null,
+      toastTimeout: null,
+
+      showSaveToast() {
+        const t = document.getElementById('save-toast');
+        if (!t) return;
+        t.classList.add('show');
+        if (this.toastTimeout) clearTimeout(this.toastTimeout);
+        this.toastTimeout = setTimeout(() => t.classList.remove('show'), 1400);
+      },
+
+      async initDB() {
+        if (navigator.storage && navigator.storage.persist) {
+          try { await navigator.storage.persist(); } catch (e) {}
+        }
+        return new Promise((resolve) => {
+          try {
+            const request = indexedDB.open(DB_NAME, 1);
+            request.onupgradeneeded = (e) => {
+              const db = e.target.result;
+              if (!db.objectStoreNames.contains(STORE_NAME)) {
+                db.createObjectStore(STORE_NAME);
+              }
+            };
+            request.onsuccess = (e) => {
+              this.db = e.target.result;
+              resolve(this.db);
+            };
+            request.onerror = () => resolve(null);
+          } catch (err) {
+            resolve(null);
+          }
+        });
+      },
+
+      async loadState(defaultState) {
+        await this.initDB();
+        let candidate = null;
+
+        try {
+          const rawLS = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_KEY);
+          if (rawLS) candidate = JSON.parse(rawLS);
+        } catch (e) {}
+
+        if (!candidate && window.name && window.name.startsWith('{')) {
+          try {
+            const parsedWN = JSON.parse(window.name);
+            if (parsedWN && parsedWN._paragonSignature) candidate = parsedWN;
+          } catch (e) {}
+        }
+
+        if (!candidate && this.db) {
+          candidate = await new Promise((resolve) => {
+            try {
+              const tx = this.db.transaction(STORE_NAME, 'readonly');
+              const store = tx.objectStore(STORE_NAME);
+              const req = store.get(STORAGE_KEY);
+              req.onsuccess = () => resolve(req.result || null);
+              req.onerror = () => resolve(null);
+            } catch (e) {
+              resolve(null);
+            }
+          });
+        }
+
+        const finalState = Object.assign({}, defaultState, candidate || {});
+        this.isHydrated = true;
+        await this.saveState(finalState, false);
+        return finalState;
+      },
+
+      async saveState(state, notify = true) {
+        if (!this.isHydrated) return;
+        state._paragonSignature = true;
+        state.lastUpdated = Date.now();
+        const serialized = JSON.stringify(state);
+
+        try { localStorage.setItem(STORAGE_KEY, serialized); } catch (e) {}
+        try { window.name = serialized; } catch (e) {}
+        if (this.db) {
+          try {
+            const tx = this.db.transaction(STORE_NAME, 'readwrite');
+            tx.objectStore(STORE_NAME).put(state, STORAGE_KEY);
+          } catch (e) {}
+        }
+        if (notify) this.showSaveToast();
+      }
+    };
+
+    // =========================================================================
+    // 2. DATOS CIENTÍFICOS: CENA, GIMNASIO, SEMANAS Y MESES
+    // =========================================================================
+    const DINNER_SCENARIOS = {
+      tacos: {
+        title: 'Escenario 1: Carne Asada o Taquiza Familiar',
+        step1: '1° FIBRA (Min 0 a 5): Come primero nopales asados, cebollitas cambray cocidas (solo el bulbo, sin aceite) y abundante pico de gallo o ensalada verde.',
+        step2: '2° PROTEÍNA MAGRA (Min 5 a 15): 200 a 250 g de corte magro (sirloin magro, filete o diezmillo limpio de grasa visible) masticando 20 veces cada bocado.',
+        step3: '3° CARBOHIDRATO TOPADO (Min 15 a 20): Arma tus tacos con máximo 2 tortillas de maíz nixtamalizado hasta después de haber comido la fibra y la mitad de la carne.',
+        ban: 'PROHIBIDO EN LA NOCHE: Chorizo, chicharrón, costilla grasa, suadero, queso fundido/Oaxaca, crema ácida y tortillas fritas en aceite.'
+      },
+      caldo: {
+        title: 'Escenario 2: Pollo o Caldos Tradicionales',
+        step1: '1° FIBRA (Min 0 a 5): Come primero toda la verdura del caldo (calabaza, chayote, ejotes, zanahoria y lechuga fresca).',
+        step2: '2° PROTEÍNA MAGRA (Min 5 a 15): 200 a 250 g de pechuga o muslo de pollo sin piel, retirando con cuchara cualquier capa grasosa de la superficie.',
+        step3: '3° CARBOHIDRATO TOPADO (Min 15 a 20): Media taza de arroz o garbanzos del caldo más máximo 2 tortillas de maíz al comal (no tostadas fritas).',
+        ban: 'PROHIBIDO EN LA NOCHE: Piel de pollo, alitas, caldo graso, crema ácida, queso graso o más de un cuarto de aguacate.'
+      },
+      guisado: {
+        title: 'Escenario 3: Guisados Caseros con Salsa',
+        step1: '1° FIBRA (Min 0 a 5): Ración obligatoria de ensalada fresca o nopales asados antes de probar el guisado.',
+        step2: '2° PROTEÍNA MAGRA (Min 5 a 15): 200 g de res magra, lomo de cerdo magro o pollo escurriendo el exceso de salsa si tiene aceite.',
+        step3: '3° CARBOHIDRATO TOPADO (Min 15 a 20): Media taza de frijoles de la olla (sin manteca) y máximo 2 tortillas de maíz.',
+        ban: 'PROHIBIDO EN LA NOCHE: Mole graso, pipián con manteca, chilaquiles fritos, capeados o empanizados.'
+      },
+      antojitos: {
+        title: 'Escenario 4: Antojitos Mexicanos',
+        step1: '1° FIBRA (Min 0 a 5): Cama abundante de lechuga picada, rábanos, pico de gallo y nopales como primer bocado.',
+        step2: '2° PROTEÍNA MAGRA (Min 5 a 15): Pollo deshebrado o res magra pidiendo que el sope, tlacoyo o quesadilla sin queso sea asado al comal sin aceite.',
+        step3: '3° CARBOHIDRATO TOPADO (Min 15 a 20): La masa de maíz nixtamalizado del propio antojito al comal (máximo 2 piezas medianas).',
+        ban: 'PROHIBIDO EN LA NOCHE: Gorditas o flautas sumergidas en aceite, crema ácida, queso rallado, bolillo, telera y pan dulce.'
+      }
+    };
+
+    const WEEKLY_CHECKLIST = [
+      { id: 'w_weigh', title: 'Domingo en Ayunas: Pesaje Corporal y Medición de Cintura Umbilical', desc: 'Al despertar después de orinar, pésate sin ropa y mide tu cintura a nivel del ombligo relajando el abdomen. Ingrésalo en la pestaña Audio/Labs para que el algoritmo ajuste tu arroz y avena de la semana.' },
+      { id: 'w_brows', title: 'Domingo: Diseño Anatómico de Cejas Masculinas y Vello Nasal', desc: 'Con buena luz y pinza limpia, retira únicamente los vellos del entrecejo (glabela) y los vellos erráticos sueltos debajo del tercio externo de la ceja. Jamás depiles por arriba ni arquees la ceja: debe verse recta, gruesa y horizontal.' },
+      { id: 'w_nails', title: 'Domingo: Uñas Quirúrgicas y Exfoliación de Manos y Brazos', desc: 'Corta y lima las uñas de las manos al ras anatómico (impecables para clínica y citas), hidrata cutículas con Dexpantenol 5% y aplica Urea 10% en codos, antebrazos y hombros.' },
+      { id: 'w_mealprep', title: 'Domingo: Cocción y Refrigeración de Arroz Blanco (Almidón Resistente Tipo 3)', desc: 'Deja cocido y refrigerado a 4°C el arroz blanco de los próximos días. El enfriamiento por 12-24 horas retrograda el almidón reduciendo su impacto glucémico y alimentando tu microbiota.' }
+    ];
+
+    const MONTHLY_MILESTONES = [
+      { id: 'm_day1_labs', dayRef: 'Día 1', title: 'Día 1 (Inicio Mes 1): Fotos Base y Panel Sanguíneo Inicial', desc: 'Fotografía frontal, perfil y espalda con luz cenital en ayunas. Registro de Glucosa, Triglicéridos, ALT/TGP, AST/TGO y Vitamina D.' },
+      { id: 'm_day5_derma', dayRef: 'Día 5 (Sem 1)', title: 'Mes 1 · Sesión Clínica #1: Hydrafacial MD con Ácido Salicílico o Dermapen 4', desc: 'Acude a clínica dermatológica para extracción profunda de filamentos sebáceos (puntos negros) o micropunción a 1.0-1.5 mm con Exosomas para disparar colágeno nuevo.' },
+      { id: 'm_day15_hair', dayRef: 'Día 15 (Sem 3)', title: 'Quincena 1: Corte de Cabello Estructural (Taper / Mid-Fade)', desc: 'Laterales limpios desvanecidos para cuadrar ópticamente el ángulo mandibular y alargar el rostro.' },
+      { id: 'm_day30_check', dayRef: 'Día 30 (Fin Mes 1)', title: 'Cierre del Mes 1: Corte de Cabello #2 + Evaluación de Mitad de Camino', desc: 'Reabastecimiento de Acetilcisteína, Colágeno, Creatina Creapure, Omega-3 IFOS y Tretinoína. Comparación de cintura y cargas del gimnasio.' },
+      { id: 'm_day35_derma2', dayRef: 'Día 35 (Mes 2)', title: 'Mes 2 · Sesión Clínica #2: Microneedling Médico (Dermapen 4 + Exosomas)', desc: 'Segunda sesión mensual (respetando 30 días de remodelación de colágeno desde la primera sesión) para lograr textura de piel de porcelana.' },
+      { id: 'm_day45_hair3', dayRef: 'Día 45 (Sem 7)', title: 'Quincena 3: Mantenimiento de Corte Craneofacial y Profilaxis Dental Propia', desc: 'Retoque de corte de cabello + limpieza con aeropulidor/ultrasonido y blanqueamiento supervisado en tu propio consultorio.' },
+      { id: 'm_day60_final', dayRef: 'Día 60 (Meta Final)', title: 'Día 60 (Fin Mes 2): Laboratorios Finales, Fotos Comparativas y Protocolo VIP', desc: 'Comparación definitiva de masa muscular, cintura, piel, resonancia vocal y biomarcadores hepáticos.' }
+    ];
+
+    const GYM_DATABASE = {
+      A: [
+        {
+          id: 'A1', name: 'A1. Press Inclinado con Mancuernas o Máquina Convergente a 30°',
+          muscle: 'Haz Clavicular del Pectoral (Pecho Superior Cuadrado)',
+          sets: 3, repMin: 8, repMax: 10, rir: 'RIR 1', tempo: '3-1-1-0', restSec: 120, stretchSec: 1, increment: 2.5, defaultWeight: 25,
+          why1A: 'El ángulo exacto de 30° alinea el empuje con las fibras claviculares superiores. La pausa de 1s abajo suma la tensión pasiva de la titina.',
+          howVector: 'Retrae escápulas contra el respaldo. Baja en 3s con codos a 45-60° del torso (forma de flecha, nunca abiertos a 90°). Haz 1s completo de pausa abajo sin rebotar y empuja en 1s.',
+          phoneticScript: 'Hola Doctor, soy tu entrenadora. Vamos con el ejercicio A uno: Press inclinado a treinta grados para llenar la parte superior de tu pecho pegada a las clavículas. Primero, acomoda el respaldo del banco en el tercer escalón, que son treinta grados. Siéntate, toma las mancuernas y junta tus omóplatos atrás como si quisieras apretar un lápiz con la espalda. Ahora baja las mancuernas contando lentamente: mil uno, mil dos, mil tres, metiendo tus codos a cuarenta y cinco grados como una flecha, nunca abiertos a los lados. Cuando las mancuernas lleguen al nivel de tu pecho, quédate totalmente congelado durante un segundo entero sintiendo cómo se estiran las fibras del pecho. Sin rebotar, empuja con fuerza hacia el techo en un segundo.'
+        },
+        {
+          id: 'A2', name: 'A2. Press Plano en Máquina Convergente o con Mancuernas',
+          muscle: 'Haz Esternocostal (Densidad y Grosor Central del Pecho)',
+          sets: 3, repMin: 8, repMax: 10, rir: 'RIR 1', tempo: '3-1-1-0', restSec: 120, stretchSec: 1, increment: 2.5, defaultWeight: 27.5,
+          why1A: 'Permite mayor rango de estiramiento inferior y convergencia medial que la barra recta, protegiendo el manguito rotador del odontólogo.',
+          howVector: 'Desciende en 3s abriendo las fibras esternales, sostén 1s de pausa abajo y empuja acercando ligeramente las manos al centro sin chocar las mancuernas.',
+          phoneticScript: 'Vamos con el ejercicio A dos: Press plano con mancuernas o en máquina convergente. Recuéstate, clava tus hombros hacia atrás contra el colchón y saca el pecho. Baja el peso contando tres segundos controlados hasta que tus manos bajen al nivel del esternón. Haz una pausa firme de un segundo abajo sintiendo el estiramiento profundo. Ahora empuja hacia arriba en un segundo imaginando que quieres juntar tus bíceps frente a tu pecho.'
+        },
+        {
+          id: 'A3', name: 'A3. Fondos Inclinado 30° o Cruces Polea Alta a Baja (+ Serrato)',
+          muscle: 'Haz Costal Inferior y Serrato Anterior (Línea Cuadrada Inferior)',
+          sets: 3, repMin: 10, repMax: 12, rir: 'RIR 1', tempo: '3-2-1-1', restSec: 90, stretchSec: 2, increment: 2.5, defaultWeight: 15,
+          why1A: 'Esculpe el corte inferior cuadrado del pectoral y marca las digitaciones del serrato anterior sobre las costillas.',
+          howVector: 'Inclina el torso 30° hacia adelante. Abre los brazos en 3s, quédate 2s en máximo estiramiento atrás y cierra hacia abajo empujando las escápulas al frente 1s.',
+          phoneticScript: 'Ejercicio A tres: Cruces de polea alta hacia abajo o fondos inclinados para dibujar la línea cuadrada inferior de tu pecho. Da un paso al frente e inclina tu torso treinta grados. Deja que los cables lleven tus brazos hacia atrás y arriba contando tres segundos. Ahí atrás, congela el movimiento durante dos segundos completos sintiendo un estiramiento intenso. Luego cierra tus manos hacia abajo frente a tu ombligo y empuja tus hombros ligeramente hacia adelante durante un segundo para marcar las costillas de boxeador del músculo serrato.'
+        },
+        {
+          id: 'A4', name: 'A4. Elevación Lateral en Polea a la Altura de la Muñeca (Plano Escapular)',
+          muscle: 'Deltoides Lateral (Anchura 3D y V-Taper)',
+          sets: 4, repMin: 12, repMax: 15, rir: 'RIR 0', tempo: '3-1-1-0', restSec: 75, stretchSec: 1, increment: 2.5, defaultWeight: 7.5,
+          why1A: 'Colocar la polea a la altura de la muñeca aplica torque máximo desde el grado 0 cuando el deltoides lateral está estirado frente a la pelvis (Pedrosa 2023).',
+          howVector: 'Eleva el brazo a 30° hacia adelante (plano escapular). Baja en 3s cruzando la mano frente al muslo opuesto y pausa 1s en estiramiento.',
+          phoneticScript: 'Ejercicio A cuatro: Elevación lateral en polea colocada exactamente a la altura de tu muñeca. Este ajuste biomecánico es clave porque mete tensión desde el primer milímetro cuando el hombro está estirado abajo. Párate de lado a la polea, deja que tu mano cruce por enfrente de tu cadera contraria y haz un segundo de pausa ahí abajo. Ahora, sin encoger el cuello, levanta el brazo hacia afuera y treinta grados hacia adelante como si vaciaras una jarra de agua hasta la altura del hombro, y baja lento en tres segundos.'
+        },
+        {
+          id: 'A5', name: 'A5. Press Militar Sentado con Respaldo a 75°',
+          muscle: 'Deltoides Anterior y Estabilidad Escapular',
+          sets: 3, repMin: 8, repMax: 10, rir: 'RIR 1', tempo: '3-1-1-0', restSec: 120, stretchSec: 1, increment: 2.5, defaultWeight: 20,
+          why1A: 'El respaldo a 75° libera el espacio subacromial y protege la columna lumbar.',
+          howVector: 'Baja en 3s con los codos ligeramente adelantados hasta el nivel del mentón, pausa 1s abajo y presiona verticalmente.',
+          phoneticScript: 'Ejercicio A cinco: Press militar sentado con el respaldo ligeramente inclinado a setenta y cinco grados para proteger tu espalda baja y tus hombros. Baja las mancuernas en tres segundos con los codos un poco hacia adelante hasta que las mancuernas lleguen a la altura de tu barbilla. Pausa un segundo completo abajo y empuja recto hacia arriba.'
+        },
+        {
+          id: 'A6', name: 'A6. Extensión de Tríceps Overhead "Katana" en Polea',
+          muscle: 'Cabeza Larga del Tríceps (+40% Hipertrofia Total de Brazo)',
+          sets: 3, repMin: 10, repMax: 12, rir: 'RIR 1', tempo: '3-1-1-0', restSec: 90, stretchSec: 1, increment: 2.5, defaultWeight: 17.5,
+          why1A: 'Maeo et al. (2023) demostraron que entrenar el tríceps con el hombro flexionado arriba de la cabeza genera +40% más hipertrofia de brazo.',
+          howVector: 'De espaldas a la polea con los codos apuntando al techo; dobla los codos dejando bajar las manos detrás de la nuca en 3s, pausa 1s en estiramiento profundo y extiende.',
+          phoneticScript: 'Ejercicio A seis: Extensión de tríceps Katana por encima de la cabeza. Los estudios de resonancia magnética de Maeo dos mil veintitrés demostraron que esta posición hace crecer cuarenta por ciento más el brazo porque estira la cabeza larga del tríceps. Ponte de espaldas a la polea, sube tus codos apuntando al techo a los lados de tu cabeza, deja que las manos bajen detrás de tu nuca en tres segundos, quédate un segundo abajo sintiendo cómo se estira todo el tríceps y extiende hacia el techo como si desenvainaras una espada.'
+        },
+        {
+          id: 'A7', name: 'A7. Pushdown de Tríceps con Cuerda en Polea Alta',
+          muscle: 'Cabezas Lateral y Medial del Tríceps (Herradura Lateral)',
+          sets: 3, repMin: 10, repMax: 12, rir: 'RIR 0', tempo: '2-0-1-1', restSec: 75, stretchSec: 1, increment: 2.5, defaultWeight: 20,
+          why1A: 'Aísla las cabezas lateral y medial en acortamiento máximo para dibujar la herradura externa del brazo.',
+          howVector: 'Húmeros clavados a las costillas; extiende en 1s abriendo la cuerda hacia los lados al final durante 1s.',
+          phoneticScript: 'Ejercicio A siete: Pushdown de tríceps con cuerda. Pega tus codos a tus costillas y no los muevas. Empuja la cuerda hacia abajo en un segundo, abre las puntas de la cuerda hacia afuera al llegar abajo apretando fuerte el tríceps durante un segundo, y regresa controlado en dos segundos.'
+        },
+        {
+          id: 'A8', name: 'A8. Crunch en Polea Arrodillado + Flexión Cervical (Cuello y Mandíbula)',
+          muscle: 'Los 8 Bloques del Recto Abdominal + Esternocleidomastoideo (Cuello Masculino)',
+          sets: 4, repMin: 12, repMax: 15, rir: 'RIR 1', tempo: '3-1-1-1', restSec: 60, stretchSec: 1, increment: 2.5, defaultWeight: 30,
+          why1A: 'Flexión espinal con peso para esculpir bloques abdominales profundos + flexión de cuello con Chin Tuck para dar grosor masculino al cuello y resaltar la mandíbula.',
+          howVector: 'De rodillas, bloquea la cadera fija y enrolla las costillas hacia la pelvis; al terminar cada serie, acuéstate boca arriba en el banco, mete la barbilla (Chin Tuck) y haz 15 flexiones de cuello.',
+          phoneticScript: 'Ejercicio A ocho: Crunch abdominal en polea arrodillado más entrenamiento de cuello. Arrodíllate frente a la polea alta sosteniendo la cuerda a los lados de tu frente. No bajes con la cadera recta como haciendo reverencia: deja la cadera inmóvil y enrolla tu pecho hacia tu ombligo vértebra por vértebra exhalando todo el aire. En tu minuto de descanso, acuéstate boca arriba en el banco dejando la cabeza fuera del borde, mete la papada hacia adentro haciendo Chin Tuck y lleva tu barbilla hacia el pecho quince veces controladas para engrosar los músculos laterales del cuello.'
+        }
+      ],
+      B: [
+        {
+          id: 'B1', name: 'B1. Jalón al Pecho Unilateral o Agarre Neutro Medio',
+          muscle: 'Fibras Ilíacas del Dorsal Ancho (Amplitud en V)',
+          sets: 3, repMin: 8, repMax: 10, rir: 'RIR 1', tempo: '3-1-1-0', restSec: 120, stretchSec: 1, increment: 2.5, defaultWeight: 45,
+          why1A: 'Alinea la tracción con las fibras ilíacas del dorsal ancho y permite máxima elongación superior.',
+          howVector: 'Jala llevando los codos pegados a las costillas hacia tu cadera en 1s; sube en 3s dejando que el hombro se eleve 1s arriba estirando el dorsal.',
+          phoneticScript: 'Hola Doctor, iniciamos el Día B de Jale con el ejercicio B uno: Jalón al pecho con agarre neutro donde las palmas se miran entre sí. Saca el pecho y jala llevando tus codos rozando tus costillas hacia tus bolsillos. Ahora viene el secreto: regresa el peso contando tres segundos y, cuando tus brazos estén arriba, deja que el peso estire tu hombro hacia arriba durante un segundo completo sintiendo cómo se abre el dorsal desde la cintura antes de volver a jalar.'
+        },
+        {
+          id: 'B2', name: 'B2. Remo con Pecho Apoyado en Máquina (Chest-Supported Row)',
+          muscle: 'Dorsal Ancho, Trapecio Medio y Romboides (Cero Carga Lumbar)',
+          sets: 3, repMin: 8, repMax: 12, rir: 'RIR 0-1', tempo: '3-1-1-1', restSec: 120, stretchSec: 1, increment: 2.5, defaultWeight: 50,
+          why1A: 'El cojín en el pecho elimina al 100% la compresión sobre tus discos lumbares L4-L5 y L5-S1 cansados del consultorio.',
+          howVector: 'Pecho apoyado en el cojín; deja que el peso abra tus escápulas hacia adelante 1s en estiramiento y rema juntando los omóplatos atrás 1s.',
+          phoneticScript: 'Ejercicio B dos: Remo con pecho apoyado en máquina. Apoya bien tu pecho en la almohadilla para que tu espalda baja descanse al cien por ciento. Al estirar los brazos adelante en tres segundos, deja que tus hombros vayan hacia el frente un segundo abriendo toda la espalda alta, y luego jala hacia atrás apretando tus omóplatos un segundo completo.'
+        },
+        {
+          id: 'B3', name: 'B3. Pullover en Polea Alta con Cuerda',
+          muscle: 'Dorsal Ancho y Serrato Anterior',
+          sets: 3, repMin: 12, repMax: 15, rir: 'RIR 1', tempo: '3-1-1-1', restSec: 75, stretchSec: 1, increment: 2.5, defaultWeight: 20,
+          why1A: 'Aísla el dorsal ancho sin cansar los bíceps y marca el serrato.',
+          howVector: 'Torso inclinado 45°; con brazos casi rectos baja la cuerda en arco hasta los muslos apretando 1s y sube en 3s hasta estirar los brazos arriba 1s.',
+          phoneticScript: 'Ejercicio B tres: Pullover en polea alta con cuerda. Inclina tu torso cuarenta y cinco grados, mantén los codos casi rectos y lleva la cuerda haciendo un arco amplio hasta tocar tus muslos pensando en empujar con las axilas. Aprieta un segundo abajo y sube lento en tres segundos hasta que tus brazos se estiren por encima de tu cabeza.'
+        },
+        {
+          id: 'B4', name: 'B4. Face Pulls con Rotación Externa + Chin Tucks + Extensión Cervical',
+          muscle: 'Deltoides Posterior, Manguito Rotador y Extensores del Cuello (Postura Dental)',
+          sets: 4, repMin: 15, repMax: 20, rir: 'RIR 1', tempo: '2-1-1-2', restSec: 60, stretchSec: 1, increment: 2.5, defaultWeight: 17.5,
+          why1A: 'Ejercicio terapéutico #1 para Cirujanos Dentistas: corrige los hombros caídos y el cuello adelantado por trabajar sobre la boca del paciente.',
+          howVector: 'Jala la cuerda hacia tu frente abriendo los pulgares hacia atrás (como haciendo pose de doble bíceps) mientras metes la barbilla hacia atrás (Chin Tuck) durante 2s.',
+          phoneticScript: 'Ejercicio B cuatro: Face Pulls con rotación externa y retracción cervical, indispensable para tu postura como dentista. Pon la polea a la altura de tus ojos. Jala la cuerda hacia tu frente separando las manos para que tus puños terminen atrás de tus orejas como en una pose de doble bíceps, y al mismo tiempo mete tu barbilla hacia atrás haciendo doble papada durante dos segundos. En el descanso haz quince extensiones suaves de cuello.'
+        },
+        {
+          id: 'B5', name: 'B5. Curl de Bíceps Bayesian en Polea Baja de Espaldas a la Torre',
+          muscle: 'Cabeza Larga del Bíceps Braquial (Pico Alto)',
+          sets: 3, repMin: 10, repMax: 12, rir: 'RIR 1', tempo: '3-1-1-0', restSec: 90, stretchSec: 1, increment: 2.5, defaultWeight: 12.5,
+          why1A: 'El hombro extendido 30° detrás del torso estira al máximo la cabeza larga del bíceps generando un pico más alto.',
+          howVector: 'Párate de espaldas a la polea baja y da un paso adelante para que tu brazo quede detrás de tu espalda; pausa 1s en estiramiento atrás y dobla el codo sin adelantar el hombro.',
+          phoneticScript: 'Ejercicio B cinco: Curl Bayesian en polea baja dando la espalda a la máquina. Toma el maneral, da un paso largo hacia adelante para que el cable jale tu brazo treinta grados detrás de tu torso. Quédate un segundo ahí sintiendo cómo se estira el bíceps desde el hombro, y dobla el codo hacia adelante manteniendo tu codo fijo atrás.'
+        },
+        {
+          id: 'B6', name: 'B6. Curl en Banco Predicador en Máquina o Barra EZ',
+          muscle: 'Porción Distal del Bíceps y Braquial (Grosor Frontal)',
+          sets: 3, repMin: 8, repMax: 12, rir: 'RIR 1', tempo: '3-1-1-0', restSec: 90, stretchSec: 1, increment: 2.5, defaultWeight: 25,
+          why1A: 'Aplica la máxima palanca mecánica cuando el codo está casi totalmente extendido abajo (Pedrosa 2023), llenando el bíceps cerca del codo.',
+          howVector: 'Pega toda la axila al cojín del predicador. Baja en 3s estrictos hasta estirar casi por completo el brazo, haz 1s de pausa abajo con el músculo en tensión y sube.',
+          phoneticScript: 'Ejercicio B seis: Curl en banco predicador. Apoya toda tu axila y tu tríceps contra el cojín sin levantarte. Baja el peso contando tres segundos lentos hasta que tu brazo esté casi completamente estirado abajo, sostén un segundo de pausa en ese punto de máxima tensión y sube con fuerza.'
+        },
+        {
+          id: 'B7', name: 'B7. Curl Martillo Cruzado + Curl de Muñeca para Flexores',
+          muscle: 'Braquiorradial y Antebrazos Rocosos',
+          sets: 3, repMin: 12, repMax: 15, rir: 'RIR 0', tempo: '2-1-1-1', restSec: 60, stretchSec: 1, increment: 2.5, defaultWeight: 14,
+          why1A: 'Engrosa el antebrazo y el músculo braquiorradial para que tus brazos se vean anchos con camisa o filipina.',
+          howVector: 'Sube la mancuerna con palma neutra cruzando frente a tu pecho; al terminar las repeticiones, apoya los antebrazos sobre tus muslos y haz 15 curls de muñeca.',
+          phoneticScript: 'Ejercicio B siete: Superserie de curl martillo cruzado frente al pecho seguido inmediatamente de quince repeticiones de curl de muñeca dejando rodar la barra o mancuerna hasta las puntas de los dedos y cerrando el puño con fuerza.'
+        },
+        {
+          id: 'B8', name: 'B8. Elevación de Piernas Colgado + 60s de Colgado Pasivo',
+          muscle: 'Abdomen Inferior y Descompresión Discal L4-S1',
+          sets: 3, repMin: 12, repMax: 15, rir: 'RIR 1', tempo: '3-0-1-1', restSec: 75, stretchSec: 1, increment: 2.5, defaultWeight: 0,
+          why1A: 'Marca la V abdominal inferior y descomprime por tracción gravitacional tus vértebras lumbares.',
+          howVector: 'Colgado de la barra, sube las piernas enrollando el pubis hacia el pecho y baja en 3s. Al terminar la última serie, quédate colgado 60s relajando el abdomen y la espalda.',
+          phoneticScript: 'Ejercicio B ocho: Elevación de piernas colgado en barra. No solo subas las rodillas: enrolla tu pelvis hacia arriba como si quisieras mostrar la hebilla de tu cinturón al techo, y baja lento en tres segundos. Al terminar la tercera serie, quédate colgado sesenta segundos respirando profundo para abrir e hidratar los discos de tu columna lumbar.'
+        }
+      ],
+      C: [
+        {
+          id: 'C1', name: 'C1. Curl Femoral SENTADO en Máquina (Primero en la Sesión)',
+          muscle: 'Isquiotibiales Biarticulares (+55% más Hipertrofia vs Acostado)',
+          sets: 4, repMin: 10, repMax: 12, rir: 'RIR 1', tempo: '3-1-1-0', restSec: 90, stretchSec: 1, increment: 5.0, defaultWeight: 45,
+          why1A: 'Maeo et al. (2021) demostraron +14% de crecimiento sentado vs +9% acostado (+55% más hipertrofia) porque al estar sentado tu cadera doblada a 90° estira los isquiotibiales.',
+          howVector: 'Aprieta fuerte el cojín sobre tus muslos. Sube el rodillo en 3s hasta que tus piernas queden rectas al frente, haz 1s de pausa en estiramiento y dobla hacia abajo con fuerza.',
+          phoneticScript: 'Hola Doctor, empezamos el Día C de Pierna con el ejercicio C uno: Curl femoral sentado. Va primero en tu rutina porque el estudio de Maeo dos mil veintiuno demostró que hacerlo sentado produce cincuenta y cinco por ciento más músculo que acostado y además calienta y lubrica tus rodillas antes de las sentadillas. Deja que tus piernas se estiren al frente en tres segundos, haz un segundo de pausa sintiendo el estiramiento detrás del muslo y dobla con potencia.'
+        },
+        {
+          id: 'C2', name: 'C2. Sentadilla Hack o Prensa a 45° con Pies Bajos',
+          muscle: 'Los 4 Vientres del Cuádriceps con Espalda Protegida',
+          sets: 3, repMin: 8, repMax: 10, rir: 'RIR 1', tempo: '3-1-1-0', restSec: 150, stretchSec: 1, increment: 5.0, defaultWeight: 100,
+          why1A: 'Poner los pies en la mitad inferior de la plataforma obliga a tu rodilla a doblarse al máximo estirando el cuádriceps con la espalda baja protegida en el respaldo.',
+          howVector: 'Pies en la parte baja de la plataforma al ancho de hombros. Baja en 3s hasta que tus muslos toquen tu abdomen sin despegar los glúteos del respaldo, pausa 1s abajo y empuja.',
+          phoneticScript: 'Ejercicio C dos: Sentadilla Hack o Prensa inclinada colocando tus pies en la parte baja de la plataforma. Pega tu cadera y tu espalda baja contra el respaldo. Baja contando tres segundos permitiendo que tus rodillas viajen hacia adelante hasta el fondo sin levantar los talones. Haz un segundo completo de pausa en el punto más profundo abajo sin rebotar y empuja con toda la planta del pie.'
+        },
+        {
+          id: 'C3', name: 'C3. Hip Thrust en Máquina/Barra o Peso Muerto Rumano',
+          muscle: 'Glúteo Mayor e Isquiotibiales Proximales',
+          sets: 3, repMin: 8, repMax: 10, rir: 'RIR 1-2', tempo: '3-1-1-1', restSec: 120, stretchSec: 1, increment: 5.0, defaultWeight: 70,
+          why1A: 'Construye potencia y volumen estético en glúteo mayor e isquiosurales.',
+          howVector: 'En peso muerto rumano: rodillas semirrígidas, desliza las mancuernas pegadas a tus espinillas mandando la cadera hacia la pared de atrás en 3s, pausa 1s abajo y sube.',
+          phoneticScript: 'Ejercicio C tres: Hip Thrust o Peso muerto rumano con mancuernas. Si haces peso muerto rumano, mantén la espalda totalmente derechita y empuja tu cadera hacia atrás como si quisieras cerrar una puerta con los glúteos mientras las mancuernas bajan rozando tus piernas durante tres segundos. Pausa un segundo cuando sientas máximo estiramiento atrás del muslo y sube apretando glúteos.'
+        },
+        {
+          id: 'C4', name: 'C4. Sentadilla Búlgara + Máquina de Aductores en Estiramiento',
+          muscle: 'Glúteo, Vasto Medial (Lágrima) y Aductor Mayor (Pierna 3D)',
+          sets: 3, repMin: 10, repMax: 12, rir: 'RIR 1', tempo: '3-1-1-0', restSec: 90, stretchSec: 1, increment: 2.5, defaultWeight: 18,
+          why1A: 'Corrige cualquier desbalance entre pierna derecha e izquierda por usar el pedal dental y añade grosor interno con la máquina de aductores.',
+          howVector: 'Empeine trasero sobre un banco; baja en 3s sobre la pierna delantera, pausa 1s abajo y sube. Al terminar haz 3×12 en máquina de aductores sosteniendo 2s de pausa con las piernas abiertas.',
+          phoneticScript: 'Ejercicio C cuatro: Sentadilla búlgara con mancuernas más máquina de aductores. Apoya el empeine de tu pie trasero en el banco, baja en tres segundos doblando profundo la pierna de enfrente, pausa un segundo abajo y sube. Al terminar tus series, pasa a la máquina de aductores sentado y haz tres series de doce repeticiones quedándote dos segundos en pausa con las piernas abiertas en cada repetición.'
+        },
+        {
+          id: 'C5', name: 'C5. Extensión de Cuádriceps con Respaldo RECLINADO a 40°–50°',
+          muscle: 'Recto Femoral (Corte Frontal Profundo del Muslo)',
+          sets: 3, repMin: 12, repMax: 15, rir: 'RIR 0', tempo: '3-2-1-0', restSec: 90, stretchSec: 2, increment: 5.0, defaultWeight: 45,
+          why1A: 'Larsen et al. (2024) demostraron que reclinar el respaldo hacia atrás estira el músculo recto femoral desde la cadera, multiplicando el corte central del muslo.',
+          howVector: 'Ajusta el respaldo de la máquina de extensiones reclinado hacia atrás (o recuéstate hacia atrás). Baja el rodillo en 3s hasta el fondo, haz 2s de pausa abajo y patea arriba.',
+          phoneticScript: 'Ejercicio C cinco: Extensión de cuádriceps con el respaldo reclinado hacia atrás a cuarenta grados. El estudio de Larsen dos mil veinticuatro comprobó que reclinar el respaldo estira el músculo central del cuádriceps desde la cadera y multiplica su crecimiento. Baja el peso en tres segundos hasta que tus talones vayan bien atrás, quédate dos segundos congelado en el estiramiento abajo y extiende.'
+        },
+        {
+          id: 'C6', name: 'C6. Elevación de Talones con Rodilla RECTA (+ Tibial Anterior)',
+          muscle: 'Gastrocnemio (+126.9% más Crecimiento) + Tibial Anterior',
+          sets: 4, repMin: 12, repMax: 15, rir: 'RIR 0', tempo: '2-3-1-0', restSec: 75, stretchSec: 3, increment: 5.0, defaultWeight: 80,
+          why1A: 'Kassiano et al. (2023) demostraron +15.2% vs +6.7% de crecimiento (+126.9% más hipertrofia) al hacer pantorrilla con rodilla recta y pausa larga abajo.',
+          howVector: 'Con las rodillas 100% rectas (en prensa o de pie), baja el talón en 2s hasta el máximo estiramiento y quédate CONGELADO ABAJO 3 SEGUNDOS EXACTOS en cada repetición antes de subir. En el descanso haz 15 elevaciones de puntas apoyado en la pared para el tibial anterior.',
+          phoneticScript: 'Ejercicio C seis: Elevación de talones con rodilla recta. Atención Doctor, aquí aplicamos el estudio de Kassiano dos mil veintitrés que duplica el crecimiento de las pantorrillas: mantén tus rodillas totalmente rectas y, al bajar los talones, quédate tres segundos completos congelado abajo contando mil uno, mil dos, mil tres en cada repetición. Prohibido rebotar. Mientras descansas, recarga tu espalda en la pared y levanta las puntas de los pies quince veces hacia tus espinillas para marcar el músculo tibial frontal.'
+        },
+        {
+          id: 'C7', name: 'C7. Elevación de Talones Sentado (Músculo Sóleo)',
+          muscle: 'Músculo Sóleo (Anchura Lateral · Meta 12 Series/Semana)',
+          sets: 3, repMin: 15, repMax: 20, rir: 'RIR 0', tempo: '2-2-1-1', restSec: 60, stretchSec: 2, increment: 2.5, defaultWeight: 40,
+          why1A: 'Aísla el músculo sóleo que da anchura vista de frente. Recuerda hacer 4 series extra de pantorrilla con rodilla recta al final del Día A o B para completar las 12 series semanales (Kassiano 2024).',
+          howVector: 'Baja los talones en 2s, sostén 2s de pausa abajo en estiramiento profundo y sube al máximo.',
+          phoneticScript: 'Ejercicio C siete: Elevación de talones sentado en máquina. Baja los talones en dos segundos, quédate dos segundos en el estiramiento más profundo abajo y sube hasta quedar de puntitas apretando un segundo arriba.'
+        }
+      ]
+    };
+
+    const DERMA_CARDS = [
+      {
+        id: 'shave', badge: 'Física Óptica · Anti-Efecto Tyndall',
+        title: '1. Rasurado Maestro en 3 Pasadas ("Glass Skin Shave" Sin Sombra Verde)',
+        summary: 'Ablandado 60s + CeraVe Verde transparente + 3 vectores (Norte-Sur, Este-Oeste 90°, Diagonal 45°) + Hielo 30s + Dexpantenol 5%.',
+        timerSec: 60, timerLabel: 'Ablandar Vello con Agua Tibia (60s)',
+        phonetic: 'Hola Doctor, te voy a guiar paso a paso en el protocolo de rasurado óptico para eliminar por completo la sombra verde o gris del bigote y el mentón. Primero: moja tu barba con agua tibia durante sesenta segundos completos para que el pelo absorba agua y se ablande un sesenta por ciento. Aplica una capa generosa de CeraVe Limpiador Hidratante botella verde: como no hace espuma blanca, podrás ver exactamente por dónde pasa la navaja. Primera pasada: desliza el rastrillo suavemente de arriba hacia abajo, desde las patillas hacia la mandíbula y desde la nariz hacia el labio, sin presionar contra la piel. Segunda pasada: vuelve a poner un poco de CeraVe verde y ahora pasa el rastrillo de lado en ángulo de noventa grados, desde tu oreja hacia la nariz y hacia la comisura de la boca. Tercera pasada de precisión: únicamente en el bigote y la barbilla, estira la piel con tu mano libre y haz trazos cortos en diagonal a cuarenta y cinco grados. Al terminar, enjuaga con agua fría y pasa un cubo de hielo durante treinta segundos por toda la zona: el frío contrae el músculo del folículo y esconde la raíz del pelo hacia adentro para que no se vea sombra. Seca a toques, pon una capa fina de Dexpantenol al cinco por ciento en el cuello y labio superior, luego tu gel Hydro Boost y tu bloqueador Eucerin.',
+        qWhat: 'Rasurado anatómico progresivo en 3 ángulos con lubricación transparente de ceramidas, cierre criogénico de 30s y neutralización cromática.',
+        qWhy: 'El tallo oscuro bajo la epidermis dispersa la luz azul-verde por Efecto Tyndall. Cortar en 3 ángulos progresivos rebaja el tallo al ras del poro sin irritar, y el hielo retrae el muñón hacia la dermis profunda.',
+        qHow: '1ra pasada: Norte a Sur. 2da pasada: Este a Oeste (de oreja a nariz/boca a 90°). 3ra pasada: Diagonal a 45° estirando la piel en bigote y mentón.',
+        qWhen: 'Por la mañana después de la ducha tibia o antes de una Cita VIP.',
+        qDose: '60s de agua tibia + 3 pasadas suaves + 30s de hielo facial + Dexpantenol 5% + bloqueador FPS 50+ (y micro-toque de corrector salmón en bigote para citas).',
+        qWhyOption: 'CeraVe Verde lubrica con ceramidas y es 100% transparente para no cortar a ciegas.'
+      },
+      {
+        id: 'vip_pool', badge: 'Puesta a Punto · Hunter Eyes & Vascularidad',
+        title: '2. Protocolo Maestro "Cita VIP / Antro" y "Albercada" Hora por Hora',
+        summary: 'Carga seca vascular (-45 min) + Bombeo exprés (-15 min) + Delineado invisible Tightlining superior + Cejas rectas.',
+        timerSec: 2700, timerLabel: 'Ventana 45 min Pre-Albercada (Carga Seca)',
+        phonetic: 'Protocolo especial para día de Albercada o Cita V I P. Tres horas antes del evento come doscientos gramos de pechuga de pollo y ciento cincuenta gramos de arroz blanco sin verduras que inflamen el abdomen. Exactamente cuarenta y cinco minutos antes de quitarte la camisa o salir a tu cita, come sesenta gramos de carbohidratos secos como arroz blanco o avena junto con cinco gramos de betabel en polvo o citrulina y un gramo y medio de sal marina tomando únicamente doscientos mililitros de agua. Esta combinación hace que tus músculos y tus venas chupen el agua que está debajo de la piel, pegando la piel al músculo y brotando las venas de los brazos. Quince minutos antes de salir, haz tres series rápidas de lagartijas, elevaciones laterales y curl de bíceps sin cansarte solo para llenar de sangre los hombros y el pecho. Finalmente, para enmarcar tu mirada, levanta con un dedo tu párpado superior y pasa la punta de un lápiz café oscuro o negro a prueba de agua únicamente por debajo de las raíces de las pestañas de arriba, jamás en el párpado de abajo. Nadie notará que traes producto pero tu mirada se verá profunda e intensa.',
+        qWhat: 'Manipulación osmótica aguda de glucógeno/sodio para piel pegada al músculo y venas 3D + diseño de mirada Tightlining superior.',
+        qWhy: 'El cotransportador SGLT1 mete glucosa y sodio al músculo y al plasma succionando el agua subcutánea residual.',
+        qHow: 'Tightlining: levantar párpado superior y aplicar lápiz a prueba de agua SOLO en la línea de agua superior entre las raíces de las pestañas. Cejas: limpiar solo entrecejo y vellos bajos.',
+        qWhen: 'T-3h: Comida plana. T-45m: Carga seca + betabel + sal en 200ml agua. T-15m: Bombeo exprés.',
+        qDose: '60-80 g carbos secos + 5 g betabel / 6 g L-Citrulina + 1.5 g sal en 200 ml de agua.',
+        qWhyOption: 'Logra el efecto visual de máxima vascularidad y abdomen compacto en 45 minutos de forma 100% fisiológica.'
+      }
+    ];
+
+    const VOICE_CARDS = [
+      {
+        id: 'v1_sovt', badge: 'Foniatría Práctica · 4 Minutos Completos',
+        title: '3. Rutina Vocal Completa: Lip Trills (60s) + Pinza Nasal (60s) + Lápiz de Demóstenes (90s)',
+        summary: 'Vibración labial "Brrrr" y "M" en pómulos + Test de pinza nasal sin M/N/Ñ + Lectura con lápiz en premolares.',
+        timerSec: 90, timerLabel: 'Técnica del Lápiz en Premolares (90s)',
+        phonetic: 'Hola Doctor, hagamos juntos tu entrenamiento de voz de cuatro minutos para que hoy hables con voz grave, limpia y magnética en el consultorio. Paso uno, durante un minuto: inhala por la nariz inflando las costillas y suelta el aire haciendo vibrar tus labios flojos diciendo Brrrrr en un tono grave durante treinta segundos. Luego cierra los labios con los dientes separados y di Mmmmm durante treinta segundos sintiendo que te hacen cosquillas los pómulos y el pecho. Paso dos, durante un minuto: aprieta y tapa tu nariz con tus dedos índice y pulgar y di en voz alta: El doctor prepara la corona de porcelana pura. Como esa frase no lleva letras M, N ni Ñ, tus dedos no deben sentir vibración en la nariz. Si vibra, simula un bostezo para levantar el paladar de atrás y repítelo. Paso tres, durante noventa segundos: muerde un lápiz limpio atravesado horizontalmente atrás, entre tus premolares, y lee un párrafo en voz alta moviendo exageradamente tu lengua y tus labios para que se entienda cada letra. Cuando te quites el lápiz, tu dicción sonará quirúrgica y con autoridad total.',
+        qWhat: 'Tracto Vocal Semi-Ocluido (Titze, 2006) + Cierre velofaríngeo + Sobrecarga neuromotora con lápiz en premolares.',
+        qWhy: 'Baja la posición de la laringe, despega el moco de las cuerdas vocales, elimina la voz gangosa nasal y potencia la articulación lingual.',
+        qHow: 'Ejecutar en orden: 60s Lip Trills/M -> 60s Pinza Nasal -> 90s Lápiz en premolares.',
+        qWhen: 'Todas las mañanas en el Paso 5 de tu Día a Día y antes de una cita importante.',
+        qDose: '3 minutos y medio de fonación técnica activa.',
+        qWhyOption: 'Es 100% práctico, no requiere memorizar teoría y transforma tu voz desde la primera sesión.'
+      }
+    ];
+
+    // =========================================================================
+    // 3. CONTROLADOR PRINCIPAL DE LA APLICACIÓN
+    // =========================================================================
+    const App = {
+      state: null,
+      activeTimerInterval: null,
+      kegelInterval: null,
+      audioCtx: null,
+      gammaOscL: null,
+      gammaOscR: null,
+      gammaGain: null,
+      pulseInterval: null,
+      isGammaPlaying: false,
+      availableVoices: [],
+      speechQueue: [],
+      isSpeakingQueue: false,
+
+      getDefaultState() {
+        return {
+          programDay: 1,
+          wakeTimeStr: '07:00',
+          gymShift: 'AM',
+          selectedGymDay: 'A',
+          selectedDinnerScenario: 'tacos',
+          weekdayOverride: 'auto',
+          speechRate: 1.0,
+          selectedVoiceURI: '',
+          completedBlocksByDay: {},
+          waterByDay: {}, // { 'day_1': 2500 }
+          weeklyTasksDone: {},
+          monthlyTasksDone: {},
+          gymLogs: {},
+          biometrics: {
+            weight: 72.0,
+            waist: 78.0,
+            glucose: 85,
+            trig: 90,
+            alt: 22,
+            vitd: 45
+          }
+        };
+      },
+
+      async init() {
+        this.state = await ParagonStorage.loadState(this.getDefaultState());
+        this.initVoiceEngine();
+        this.syncHeaderUI();
+        this.renderBiometrics();
+        this.renderDailyBlocks();
+        this.renderWaterTracker();
+        this.selectDinnerScenario(this.state.selectedDinnerScenario || 'tacos');
+        this.selectGymDay(this.state.selectedGymDay || 'A');
+        this.renderCalendarTab();
+        this.renderDermaAndVoiceTab();
+      },
+
+      // -----------------------------------------------------------------------
+      // MOTOR DE VOZ DE ENTRENADORA PERSONAL (FRASE POR FRASE + ACENTO MX)
+      // -----------------------------------------------------------------------
+      initVoiceEngine() {
+        if (!('speechSynthesis' in window)) return;
+
+        const loadVoices = () => {
+          const all = window.speechSynthesis.getVoices() || [];
+          const spanish = all.filter(v => v.lang && v.lang.toLowerCase().startsWith('es'));
+          this.availableVoices = spanish.length > 0 ? spanish : all;
+
+          // Ordenar priorizando voces femeninas mexicanas / latinas de alta calidad en iOS (Paulina, Mónica, Siri, Luciana)
+          this.availableVoices.sort((a, b) => {
+            const score = (v) => {
+              let s = 0;
+              const name = (v.name || '').toLowerCase();
+              const lang = (v.lang || '').toLowerCase();
+              if (lang.includes('es-mx')) s += 50;
+              else if (lang.includes('es-us') || lang.includes('es-419')) s += 35;
+              else if (lang.startsWith('es')) s += 20;
+              if (name.includes('paulina') || name.includes('monica') || name.includes('mónica') || name.includes('luciana') || name.includes('marisol') || name.includes('siri') || name.includes('premium') || name.includes('enhanced')) s += 40;
+              return s;
+            };
+            return score(b) - score(a);
+          });
+
+          const sel = document.getElementById('voice-select');
+          if (sel && this.availableVoices.length > 0) {
+            sel.innerHTML = this.availableVoices.map(v => `
+              <option value="${v.voiceURI}">${v.name} (${v.lang})</option>
+            `).join('');
+
+            if (this.state.selectedVoiceURI && this.availableVoices.some(v => v.voiceURI === this.state.selectedVoiceURI)) {
+              sel.value = this.state.selectedVoiceURI;
+            } else {
+              this.state.selectedVoiceURI = this.availableVoices[0].voiceURI;
+              sel.value = this.state.selectedVoiceURI;
+            }
+          }
+        };
+
+        loadVoices();
+        if (window.speechSynthesis.onvoiceschanged !== undefined) {
+          window.speechSynthesis.onvoiceschanged = loadVoices;
+        }
+        this.syncRateButtons();
+      },
+
+      changeVoiceSelection(uri) {
+        this.state.selectedVoiceURI = uri;
+        ParagonStorage.saveState(this.state);
+        this.testCoachVoice();
+      },
+
+      setSpeechRate(rate) {
+        this.state.speechRate = rate;
+        ParagonStorage.saveState(this.state);
+        this.syncRateButtons();
+      },
+
+      syncRateButtons() {
+        const r = this.state.speechRate || 1.0;
+        document.getElementById('rate-09').className = r < 0.96 ? 'btn-gold' : 'btn-dark';
+        document.getElementById('rate-10').className = (r >= 0.96 && r <= 1.04) ? 'btn-gold' : 'btn-dark';
+        document.getElementById('rate-11').className = r > 1.04 ? 'btn-gold' : 'btn-dark';
+      },
+
+      testCoachVoice() {
+        this.speakText('Hola Doctor, soy tu entrenadora personal. Estoy configurada con pronunciación clara en español. Cuando toques el botón de bocina en cualquier paso de tu día o del gimnasio, te guiaré segundo a segundo con ejemplos claros mientras aparecen aquí abajo los subtítulos en vivo.');
+      },
+
+      speakText(fullText) {
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        this.speechQueue = [];
+        this.isSpeakingQueue = false;
+
+        if (this.gammaGain && this.audioCtx) {
+          this.gammaGain.gain.setTargetAtTime(0.03, this.audioCtx.currentTime, 0.1);
+        }
+
+        // Dividir el texto en oraciones naturales para que iOS Safari jamás corte los guiones largos y haga pausas respiratorias reales
+        const sentences = fullText
+          .replace(/\s+/g, ' ')
+          .split(/(?<=[.!?:;])\s+/)
+          .map(s => s.trim())
+          .filter(s => s.length > 0);
+
+        this.speechQueue = sentences;
+        this.isSpeakingQueue = true;
+
+        const subBar = document.getElementById('coach-subtitle-bar');
+        const subText = document.getElementById('coach-subtitle-text');
+        if (subBar) subBar.classList.remove('hidden');
+
+        const chosenVoice = this.availableVoices.find(v => v.voiceURI === this.state.selectedVoiceURI) || this.availableVoices[0] || null;
+
+        const playNextSentence = () => {
+          if (!this.isSpeakingQueue || this.speechQueue.length === 0) {
+            this.isSpeakingQueue = false;
+            if (subBar) setTimeout(() => { if (!this.isSpeakingQueue) subBar.classList.add('hidden'); }, 2200);
+            if (this.gammaGain && this.audioCtx && this.isGammaPlaying) {
+              this.gammaGain.gain.setTargetAtTime(0.14, this.audioCtx.currentTime, 0.2);
+            }
+            return;
+          }
+
+          const currentSentence = this.speechQueue.shift();
+          if (subText) subText.textContent = currentSentence;
+
+          const utter = new SpeechSynthesisUtterance(currentSentence);
+          if (chosenVoice) {
+            utter.voice = chosenVoice;
+            utter.lang = chosenVoice.lang || 'es-MX';
+          } else {
+            utter.lang = 'es-MX';
+          }
+          utter.rate = this.state.speechRate || 1.0;
+          utter.pitch = 1.03;
+
+          utter.onend = () => {
+            if (this.isSpeakingQueue) {
+              setTimeout(playNextSentence, 120);
+            }
+          };
+          utter.onerror = () => {
+            if (this.isSpeakingQueue) playNextSentence();
+          };
+
+          window.speechSynthesis.speak(utter);
+        };
+
+        playNextSentence();
+      },
+
+      stopSpeech() {
+        this.isSpeakingQueue = false;
+        this.speechQueue = [];
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        const subBar = document.getElementById('coach-subtitle-bar');
+        if (subBar) subBar.classList.add('hidden');
+      },
+
+      // -----------------------------------------------------------------------
+      // CÁLCULO DE DÍA DE LA SEMANA, SEMANA (1-8) Y MES (1-2)
+      // -----------------------------------------------------------------------
+      getEffectiveWeekday() {
+        if (this.state.weekdayOverride && this.state.weekdayOverride !== 'auto') {
+          return parseInt(this.state.weekdayOverride, 10);
+        }
+        return new Date().getDay(); // 0=Dom, 1=Lun, 2=Mar, 3=Mié, 4=Jue, 5=Vie, 6=Sáb
+      },
+
+      getDayContext() {
+        const pDay = this.state.programDay || 1;
+        const monthNum = pDay <= 30 ? 1 : 2;
+        const weekNum = Math.min(8, Math.ceil(pDay / 7));
+        const wkDay = this.getEffectiveWeekday();
+        const names = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        const dayName = names[wkDay];
+
+        const isRetinoidNight = (wkDay === 2 || wkDay === 4 || wkDay === 6); // Mar, Jue, Sáb
+        const isKetoHairDay = (wkDay === 2 || wkDay === 5); // Mar, Vie
+        const isBoronActive = (wkDay >= 1 && wkDay <= 5); // Lun a Vie (Sáb y Dom descansa Boro)
+
+        return { pDay, monthNum, weekNum, wkDay, dayName, isRetinoidNight, isKetoHairDay, isBoronActive };
+      },
+
+      setWeekdayOverride(val) {
+        this.state.weekdayOverride = val;
+        ParagonStorage.saveState(this.state);
+        this.syncHeaderUI();
+        this.renderDailyBlocks();
+      },
+
+      addMinutesToTime(timeStr, minsToAdd) {
+        const [h, m] = (timeStr || '07:00').split(':').map(Number);
+        const total = (h * 60 + m + minsToAdd + 1440) % 1440;
+        const nh = Math.floor(total / 60);
+        const nm = total % 60;
+        const period = nh >= 12 ? 'PM' : 'AM';
+        const h12 = nh % 12 === 0 ? 12 : nh % 12;
+        return `${String(h12).padStart(2, '0')}:${String(nm).padStart(2, '0')} ${period}`;
+      },
+
+      triggerWakeUpNow() {
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        this.state.wakeTimeStr = `${hh}:${mm}`;
+        ParagonStorage.saveState(this.state);
+        this.syncHeaderUI();
+        this.renderDailyBlocks();
+        this.speakText(`Buenos días Doctor. He sincronizado tu reloj biológico T más cero a las ${hh} horas con ${mm} minutos. Hoy estás en el día ${this.state.programDay} de sesenta. Empezamos de inmediato en el baño con el Paso uno: raspado de lengua, lavado nasal, inmersión en agua con hielo y vacío abdominal.`);
+      },
+
+      setCustomWakeTime(val) {
+        if (!val) return;
+        this.state.wakeTimeStr = val;
+        ParagonStorage.saveState(this.state);
+        this.renderDailyBlocks();
+      },
+
+      setGymShift(shift) {
+        this.state.gymShift = shift;
+        ParagonStorage.saveState(this.state);
+        this.syncHeaderUI();
+        this.renderDailyBlocks();
+      },
+
+      changeProgramDay(delta) {
+        let next = (this.state.programDay || 1) + delta;
+        if (next < 1) next = 1;
+        if (next > 60) next = 60;
+        this.state.programDay = next;
+        ParagonStorage.saveState(this.state);
+        this.syncHeaderUI();
+        this.renderDailyBlocks();
+        this.renderWaterTracker();
+        this.renderCalendarTab();
+      },
+
+      jumpToProgramDay(dayNum) {
+        this.state.programDay = dayNum;
+        ParagonStorage.saveState(this.state);
+        this.syncHeaderUI();
+        this.renderDailyBlocks();
+        this.renderWaterTracker();
+        this.renderCalendarTab();
+        this.switchTab('daily');
+      },
+
+      syncHeaderUI() {
+        const ctx = this.getDayContext();
+        document.getElementById('header-day-label').textContent = `DÍA ${ctx.pDay} / 60`;
+        document.getElementById('header-month-week-badge').textContent = `MES ${ctx.monthNum} · SEMANA ${ctx.weekNum}`;
+        document.getElementById('header-weekday-badge').textContent = `${ctx.dayName.toUpperCase()}`;
+        document.getElementById('wake-time-input').value = this.state.wakeTimeStr;
+
+        const pillsEl = document.getElementById('today-special-pills');
+        if (pillsEl) {
+          pillsEl.innerHTML = `
+            <span class="badge ${ctx.isRetinoidNight ? 'badge-rose' : 'badge-emerald'} mono">
+              Noche Hoy: ${ctx.isRetinoidNight ? 'TRETINOÍNA 0.025% (Espera 20m)' : 'RECUPERACIÓN HIALURÓNICO + DEXPANTENOL'}
+            </span>
+            <span class="badge ${ctx.isKetoHairDay ? 'badge-purple' : 'badge-cyan'} mono">
+              Ducha Hoy: ${ctx.isKetoHairDay ? 'TOCA KETOCONAZOL 2% (5 min) + PERÓXIDO AXILAS' : 'SHAMPOO SUAVE + PERÓXIDO AXILAS (60s)'}
+            </span>
+            <span class="badge ${ctx.isBoronActive ? 'badge-gold' : 'badge-cyan'} mono">
+              Testosterona: ${ctx.isBoronActive ? 'BORO ACTIVO (6-9 mg)' : 'DESCANSO CICLADO DE BORO'}
+            </span>
+          `;
+        }
+
+        const btnAm = document.getElementById('btn-shift-am');
+        const btnPm = document.getElementById('btn-shift-pm');
+        if (this.state.gymShift === 'AM') {
+          btnAm.className = 'btn-gold';
+          btnPm.className = 'btn-dark';
+        } else {
+          btnPm.className = 'btn-gold';
+          btnAm.className = 'btn-dark';
+        }
+      },
+
+      // -----------------------------------------------------------------------
+      // MEDIDOR DE AGUA DIARIA (3500 ML)
+      // -----------------------------------------------------------------------
+      addWater(amountMl) {
+        const dayKey = `day_${this.state.programDay}`;
+        const curr = this.state.waterByDay[dayKey] || 0;
+        const next = Math.max(0, Math.min(5500, curr + amountMl));
+        this.state.waterByDay[dayKey] = next;
+        ParagonStorage.saveState(this.state);
+        this.renderWaterTracker();
+      },
+
+      renderWaterTracker() {
+        const dayKey = `day_${this.state.programDay}`;
+        const curr = this.state.waterByDay[dayKey] || 0;
+        const pct = Math.min(100, Math.round((curr / 3500) * 100));
+        document.getElementById('water-current-label').textContent = curr;
+        document.getElementById('water-progress-bar').style.width = `${pct}%`;
+      },
+
+      // -----------------------------------------------------------------------
+      // ALGORITMO BIOMÉTRICO (PILAR 8)
+      // -----------------------------------------------------------------------
+      getNutritionalAdjustments() {
+        const b = this.state.biometrics || this.getDefaultState().biometrics;
+        let riceGrams = 200;
+        let oatsGrams = 40;
+        let morningTortillas = this.state.gymShift === 'AM' ? 3 : 2;
+        let dinnerTortillas = this.state.gymShift === 'AM' ? 2 : 1;
+        let proteinGrams = 250;
+        let vitDUI = b.vitd > 70 ? 2000 : 5000;
+        let statusMode = 'Recomposición Muscular y Definición Óptima';
+        let clinicalNotes = [];
+
+        if (b.waist > 79.0 || b.trig > 120 || b.glucose >= 92) {
+          riceGrams = 150;
+          dinnerTortillas = 1;
+          statusMode = 'Recorte Anti-Visceral y Sensibilización Insulínica Activa';
+          clinicalNotes.push('Se ajustó el arroz de las 3:00 PM a 150 g y se topó la cena a 1 tortilla con 15 min de flexiones de sóleo (SPU).');
+        } else if (b.waist <= 76.0 && b.weight < 72.5) {
+          riceGrams = 280;
+          oatsGrams = 60;
+          morningTortillas = 3;
+          statusMode = 'Superávit Anabólico Limpio (+200 kcal libres de grasa)';
+          clinicalNotes.push('Cintura compacta (<76 cm): se añadieron +80 g de arroz enfriado y +20 g de avena para acelerar la ganancia muscular.');
+        } else {
+          clinicalNotes.push('Relación peso-cintura óptima: se mantienen 250 g de proteína magra y 200 g de arroz enfriado.');
+        }
+
+        if (b.alt > 30) {
+          clinicalNotes.push('Alerta Hepatobiliar (ALT > 30 U/L): Prioriza pescado blanco y pechuga de pollo en la cena y mantén NAC 600 mg + brócoli con 1 g de mostaza.');
+        } else {
+          clinicalNotes.push('Transaminasa ALT en rango óptimo (<30 U/L): hepatoprotección con NAC, espirulina y sulforafano al 100%.');
+        }
+
+        return { riceGrams, oatsGrams, morningTortillas, dinnerTortillas, proteinGrams, vitDUI, statusMode, clinicalNotes };
+      },
+
+      renderBiometrics() {
+        const b = this.state.biometrics;
+        document.getElementById('bio-weight').value = b.weight;
+        document.getElementById('bio-waist').value = b.waist;
+        document.getElementById('bio-glucose').value = b.glucose;
+        document.getElementById('bio-trig').value = b.trig;
+        document.getElementById('bio-alt').value = b.alt;
+        document.getElementById('bio-vitd').value = b.vitd;
+
+        const adj = this.getNutritionalAdjustments();
+        document.getElementById('biometric-prescription-box').innerHTML = `
+          <div class="row-between" style="margin-bottom:8px;">
+            <span style="font-weight:800; color:#34D399;" class="mono">${adj.statusMode}</span>
+            <span class="badge badge-emerald mono">Vit D3: ${adj.vitDUI} UI/día</span>
+          </div>
+          <div class="grid-4" style="margin-bottom:8px;">
+            <div class="q-box"><span style="font-size:10px; color:var(--text-muted); display:block;">Proteína 3 PM</span><b class="mono" style="font-size:14px;">${adj.proteinGrams} g</b></div>
+            <div class="q-box"><span style="font-size:10px; color:var(--text-muted); display:block;">Arroz 3 PM</span><b class="mono" style="font-size:14px; color:var(--gold);">${adj.riceGrams} g</b></div>
+            <div class="q-box"><span style="font-size:10px; color:var(--text-muted); display:block;">Avena Licuado</span><b class="mono" style="font-size:14px; color:var(--cyan);">${adj.oatsGrams} g</b></div>
+            <div class="q-box"><span style="font-size:10px; color:var(--text-muted); display:block;">Tortillas Des/Cena</span><b class="mono" style="font-size:14px;">${adj.morningTortillas} / ${adj.dinnerTortillas}</b></div>
+          </div>
+          <ul style="margin:0; padding-left:18px; color:#CBD5E1;">
+            ${adj.clinicalNotes.map(n => `<li style="margin-bottom:4px;">${n}</li>`).join('')}
+          </ul>
+        `;
+      },
+
+      saveBiometrics() {
+        this.state.biometrics = {
+          weight: parseFloat(document.getElementById('bio-weight').value) || 72.0,
+          waist: parseFloat(document.getElementById('bio-waist').value) || 78.0,
+          glucose: parseFloat(document.getElementById('bio-glucose').value) || 85,
+          trig: parseFloat(document.getElementById('bio-trig').value) || 90,
+          alt: parseFloat(document.getElementById('bio-alt').value) || 22,
+          vitd: parseFloat(document.getElementById('bio-vitd').value) || 45
+        };
+        ParagonStorage.saveState(this.state);
+        this.renderBiometrics();
+        this.renderDailyBlocks();
+      },
+
+      // -----------------------------------------------------------------------
+      // LOS 12 PASOS MAESTROS DEL DÍA A DÍA (TODO INTEGRADO SIN SALTARSE NADA)
+      // -----------------------------------------------------------------------
+      getDailyBlocksData() {
+        const w = this.state.wakeTimeStr;
+        const isAM = this.state.gymShift === 'AM';
+        const adj = this.getNutritionalAdjustments();
+        const ctx = this.getDayContext();
+
+        return [
+          {
+            id: 'step1_wake',
+            timeLabel: `${this.addMinutesToTime(w, 0)} (T+0 min)`,
+            badge: 'Paso 1 · Despertar Vagal y Cintura',
+            title: '1. Raspado Lingual (5s) + Lavado Nasal 45° (20s) + Hielo Facial (2×15s) + Vacío Abdominal (4×20s)',
+            summary: 'Antes de probar agua: limpia lengua, barre moco retronasal, drena ojeras con hielo y compacta tu cintura en ayunas.',
+            timerSec: 15,
+            timerLabel: 'Inmersión Facial en Agua con Hielo (15 Segundos Exactos)',
+            waterAdd: 0,
+            phonetic: 'Hola Doctor, buenos días. Empezamos el Paso uno en el minuto T más cero, justo al levantarte de la cama y antes de tomar una sola gota de agua. Primero: toma tu raspador lingual de acero inoxidable, saca la lengua frente al espejo, coloca el arco lo más atrás posible y deslízalo hacia la punta cinco veces firmes durante cinco segundos, enjuagando el raspador en el chorro de agua. Así evitas tragarte las bacterias de la noche. Segundo: toma tu spray de agua de mar o tu jeringa de veinte mililitros con solución salina, inclina tu cabeza cuarenta y cinco grados hacia adelante sobre el lavabo, mete la boquilla en tu fosa nasal derecha apuntando ligeramente hacia tu ojo derecho, no hacia el centro de la nariz, y presiona diez segundos mientras respiras por la boca; luego repite diez segundos en la fosa izquierda. Tercero: frente a tu recipiente de agua con hielo entre cuatro y diez grados, saca casi todo el aire de tus pulmones y mete toda la cara desde la frente hasta las mejillas durante quince segundos exactos. Sal, respira diez segundos por la nariz y vuelve a sumergir la cara otros quince segundos. Esto activa tu nervio vago y quita lo hinchado de los ojos al instante. Cuarto: ahí mismo de pie, saca todo el aire por la boca y chupa el ombligo con fuerza hacia tu espalda como si quisieras abrocharte un pantalón muy estrecho, aguantando veinte segundos durante cuatro series.',
+            qWhat: 'Raspado lingual mecánico + lavado salino retronasal + crioterapia facial vagal (2×15s) + vacío abdominal hipopresivo.',
+            qWhy: '15 segundos de frío facial activan el reflejo de inmersión mamífero vía nervio trigémino y vago reduciendo la frecuencia cardíaca un 22.5% (Gooden 1994; Khurana 2006) sin provocar la vasodilatación de rebote de Lewis.',
+            qHow: 'Raspador de atrás hacia adelante; lavado nasal a 45° apuntando al canto externo del ojo; inmersión vertical del rostro al 60% de aire pulmonar; vacío abdominal succionando el ombligo hacia la columna.',
+            qWhen: `En el baño inmediatamente al despertar (${this.addMinutesToTime(w, 0)}).`,
+            qDose: '5 pasadas linguales (5s) + 20 ml salina/fosa (10s c/u) + 2 ciclos × 15s hielo facial + 4 × 20s vacío abdominal.',
+            qWhyOption: 'Despierta tu sistema nervioso, limpia la garganta de moco nocturno y reduce de 2 a 4 cm tu cintura en 60 días.'
+          },
+          {
+            id: 'step2_shower_intimate',
+            timeLabel: `${this.addMinutesToTime(w, 10)} (T+10 min)`,
+            badge: `Paso 2 · Ducha Médica, Zona Íntima y ${ctx.isKetoHairDay ? 'Ketoconazol 2%' : 'Rasurado Óptico'}`,
+            title: `2. Ducha: Lavado Facial CeraVe + Axilas Peróxido (60s) + ${ctx.isKetoHairDay ? '¡HOY TOCA KETOCONAZOL 2% (5 min)!' : 'Cabello Suave'} + Zona Íntima y Brazos con Urea 10%`,
+            summary: 'Cara con CeraVe Verde (30s) + Axilas con Peróxido de Benzoilo (60s) + Glande/prepucio con CeraVe y Dexpantenol 5% post-ducha + Urea 10% en brazos.',
+            timerSec: ctx.isKetoHairDay ? 300 : 60,
+            timerLabel: ctx.isKetoHairDay ? 'Shampoo Ketoconazol 2% en Cuero Cabelludo (5 Minutos)' : 'Peróxido de Benzoilo en Axilas (60 Segundos)',
+            waterAdd: 0,
+            phonetic: `Vamos al Paso dos en la regadera. ${ctx.isKetoHairDay ? 'Atención Doctor: como hoy es ' + ctx.dayName + ', primero moja tu cabello, aplica shampoo de Ketoconazol al dos por ciento frotando con las yemas de los dedos directamente la piel del cuero cabelludo y déjalo actuar durante cinco minutos completos mientras haces el resto de tu ducha para bloquear la hormona D H T y engrosar tu cabello.' : 'Hoy usa tu shampoo suave habitual sin sulfatos agresivos.'} Ahora, mientras estás en la ducha: toma un poco de gel de Peróxido de Benzoilo al dos punto cinco o cinco por ciento, frótalo en tus dos axilas y déjalo actuar sesenta segundos antes de enjuagarlo muy bien para eliminar al cien por ciento las bacterias del olor corporal. Para tu cara: moja con agua tibia y lava durante treinta segundos haciendo círculos hacia arriba con tu CeraVe Limpiador Hidratante botella verde, o aprovéchalo para tu rasurado en tres pasadas. Para tu higiene íntima masculina: retrae suavemente el prepucio y lava el glande únicamente con la espuma suave de CeraVe botella verde sin perfume; jamás uses jabón de barra alcalino porque irrita y reseca la mucosa. Al salir de la regadera: seca tu zona íntima a toques suaves y aplica una micro-gota del tamaño de una lenteja de Dexpantenol al cinco por ciento en el glande y prepucio para mantener la piel sana, elástica y con aspecto impecable. Finalmente, aplica crema con Urea al diez por ciento desde tus muñecas hasta tus hombros para adelgazar la piel gruesa y hacer que se marquen tus venas.`,
+            qWhat: 'Higiene dermatológica integral de cuero cabelludo, rostro, axilas, mucosa genital masculina y queratolisis vascular en brazos.',
+            qWhy: 'El Peróxido de Benzoilo por 60s erradica las bacterias Corynebacterium causantes del mal olor; el Ketoconazol 2% por 5 min bloquea la 5-alfa-reductasa folicular (Piérard-Franchimont 1998); el CeraVe Verde + Dexpantenol 5% regenera la mucosa balanoprepucial sin alterar su pH; y la Urea 10% afina la epidermis sobre las venas de los brazos.',
+            qHow: 'En ducha: Ketoconazol en raíz (Mar/Vie 5m) -> Peróxido en axilas (60s y enjuagar a fondo) -> CeraVe Verde en cara (30s) y zona íntima. Al secar: micro-capa de Dexpantenol 5% en zona íntima y Urea 10% en brazos y hombros.',
+            qWhen: `En la ducha matutina (${this.addMinutesToTime(w, 10)}).`,
+            qDose: '5 min Ketoconazol 2% (Mar/Vie) + 60s Peróxido de Benzoilo axilar + 1 lenteja de Dexpantenol 5% íntimo + Urea 10% en brazos.',
+            qWhyOption: 'Cubre en un solo hábito de 5 minutos tu salud capilar, olor cero, estética íntima y definición de brazos.'
+          },
+          {
+            id: 'step3_morning_skin',
+            timeLabel: `${this.addMinutesToTime(w, 20)} (T+20 min)`,
+            badge: 'Paso 3 · Rostro Glass Skin, Protector Solar #1 y Labios',
+            title: '3. Rutina Facial Matutina: Ácido Azelaico 15% + Hydro Boost + Bloqueador Eucerin FPS 50+ (2 Dedos) + Dexpantenol en Labios',
+            summary: 'Orden exacto frente al espejo para cerrar poros, eliminar rojeces, proteger el colágeno del sol y tener labios hidratados.',
+            timerSec: 60,
+            timerLabel: 'Aplicación y Absorción de Capas Faciales (60s)',
+            waterAdd: 0,
+            phonetic: 'Paso tres: Blindaje de rostro, protector solar y labios frente al espejo antes de vestirte. Primero: sobre tu cara limpia y seca, toma una gota del tamaño de un chícharo de Ácido Azelaico al quince por ciento en gel y espárcela en pómulos, nariz y frente; esto borra cualquier tono rojizo y cierra los poros. Segundo: aplica una capa ligera de Neutrogena Hydro Boost Gel dando toquecitos hacia arriba. Tercero, el paso más importante para no envejecer y no mancharte si usas Tretinoína: aplica tu bloqueador Eucerin Oil Control toque seco FPS cincuenta más usando la regla de los dos dedos: traza una línea de bloqueador a lo largo de tu dedo índice y otra a lo largo de tu dedo medio, y distribúyelo por toda la cara, párpados, orejas y cuello. No deja brillo grasoso. Cuarto: pon una pequeña gota de pomada de Dexpantenol al cinco por ciento Bepanthen sobre tus labios para que todo el día se vean suaves, sanos y sin pellejitos secos.',
+            qWhat: 'Secuencia dermatológica matutina de 4 capas (Despigmentante/Anti-rojeces + Hidratante Hialurónico + Fotoprotector Matificante + Regenerador Labial).',
+            qWhy: 'Siempre se aplica del producto más ligero al más denso. El Ácido Azelaico 15% unifica el tono; Eucerin Oil Control FPS 50+ protege el nuevo colágeno de los rayos UV y controla el sebo por 8 horas; y el Dexpantenol 5% repara la mucosa labial.',
+            qHow: '1° Ácido Azelaico 15% (piel seca) -> 2° Hydro Boost -> 3° Eucerin Oil Control FPS 50+ (medida de 2 dedos completos en cara y cuello) -> 4° Dexpantenol 5% en labios (y micro-toque de corrector salmón en bigote si hubo rasurado).',
+            qWhen: `Al salir de la ducha antes de salir de casa (${this.addMinutesToTime(w, 20)}).`,
+            qDose: '1 chícharo Ácido Azelaico 15% + 2 líneas de dedo (2 g) de Eucerin Oil Control FPS 50+ + 1 gota Dexpantenol 5% en labios.',
+            qWhyOption: 'Sin los 2 dedos de protector solar por la mañana, la luz solar degrada el colágeno dérmico y mancha la piel tratada con retinoides.'
+          },
+          {
+            id: 'step4_supershot',
+            timeLabel: `${this.addMinutesToTime(w, 25)} (T+25 min)`,
+            badge: 'Paso 4 · Glutatión, Colágeno (2x), Mucolítico y Agua #1 (600 ml)',
+            title: '4. Super-Shot Matutino: 600 ml Agua + 2 Limones + 1g Sal + NAC 600mg + Colágeno 15g + Espirulina 3g + Betabel (+ Enjuague 5s)',
+            summary: 'Bebe tus primeros 600 ml de agua con el protocolo completo para deshacer flemas, proteger el hígado, duplicar colágeno y brotar venas.',
+            timerSec: 15,
+            timerLabel: 'Enjuague Dental de Neutralización de pH con Agua Pura (5-15s)',
+            waterAdd: 600,
+            phonetic: 'Paso cuatro: Super-Shot matutino en la cocina. Sirve un vaso grande con seiscientos mililitros de agua filtrada a temperatura ambiente. Pon a disolver una tableta efervescente de seiscientos miligramos de Acetilcisteína genérica, que rompe las flemas de tu garganta y llena tu hígado de glutatión antioxidante. Agrega dos cucharadas soperas colmadas, que son quince gramos exactos, de grenetina hidrolizada o colágeno puro sin azúcar, junto con el jugo recién exprimido de dos limones reales para asegurar los cincuenta miligramos de vitamina C que activan el colágeno según el estudio del Doctor Keith Baar. Añade una pizca de un gramo de sal marina, tres gramos de espirulina orgánica y cien gramos de betabel licuado o cinco gramos de betabel en polvo para disparar el óxido nítrico y marcar las venas. Bébelo todo y, en cuanto termines, toma un trago de agua simple, haz buches vigorosos durante cinco segundos y pásatela para proteger el esmalte de tus dientes del ácido del limón.',
+            qWhat: 'Carga bioquímica matutina de 600 ml con N-Acetilcisteína, 15 g de colágeno activado con vitamina C, espirulina y nitratos de betabel.',
+            qWhy: 'La NAC (600 mg) escinde los puentes disulfuro del moco faríngeo ("gargajos") y sintetiza glutatión hepático. Los 15 g de colágeno con ≥50 mg de Vitamina C duplican (2x) la síntesis de colágeno PINP a los 60 minutos (Shaw & Baar, Am J Clin Nutr, 2017).',
+            qHow: 'Disolver en 600 ml de agua, beber completo, presionar el botón "+600 ml" de agua y hacer un enjuague bucal de 5 segundos con agua simple.',
+            qWhen: `Exactamente a las ${this.addMinutesToTime(w, 25)} (45 a 60 min antes de tu activación mecánica).`,
+            qDose: '600 ml agua + jugo 2 limones + 1 g sal + 600 mg NAC + 15 g colágeno + 3 g espirulina + 100 g betabel (o 5 g polvo).',
+            qWhyOption: '15 g de colágeno/grenetina pura con limón logran el pico de 105 µmol/L de hidroxiprolina comprobado por Baar (5 g no sirven).'
+          },
+          {
+            id: 'step5_voice_mobility',
+            timeLabel: `${this.addMinutesToTime(w, 80)} (T+80 min)`,
+            badge: 'Paso 5 · Pico de Colágeno (60m) + Voz de Autoridad (4m) + Olfato',
+            title: '5. Activación Articular de Colágeno (6 min) + Entrenamiento Vocal Práctico (Lip Trills, Pinza Nasal y Lápiz) + 4 Aromas',
+            summary: 'Justo a los 55-60 min del Super-Shot: 6 min de saltos/movilidad para meter el colágeno a tendones + 4 min de voz grave y dicción.',
+            timerSec: 240,
+            timerLabel: 'Entrenamiento Vocal Completo (4 Minutos)',
+            waterAdd: 0,
+            phonetic: 'Paso cinco: Estamos exactamente a una hora de que tomaste tu colágeno, por lo que en este minuto la hidroxiprolina está en su punto más alto en tu sangre. Primero mueve tus hombros, rodillas, tobillos y cuello o salta suavemente durante cinco minutos para que tus cartílagos y tendones absorban ese colágeno como una esponja. Mientras tanto, hagamos tus cuatro minutos de voz: primero haz vibrar tus labios haciendo Brrrrr treinta segundos y luego di Mmmmm treinta segundos sintiendo que te vibran los pómulos y el pecho. Segundo: tápate la nariz con dos dedos y di: El doctor prepara la corona de porcelana pura; verifica que tu nariz no zumbe. Tercero: muerde un lápiz horizontalmente entre tus premolares durante sesenta segundos leyendo en voz alta moviendo mucho la lengua, y luego lee treinta segundos sin el lápiz. Termina oliendo durante veinte segundos tu café en grano, limón, clavo dental y eucalipto para activar tu memoria.',
+            qWhat: 'Bombeo mecánico articular en el pico plasmático de colágeno + rutina foniátrica de Tracto Vocal Semi-Ocluido (Titze 2006) + entrenamiento olfatorio de Hummel (2009).',
+            qWhy: 'Los tendones y cartílagos son tejidos avasculares que requieren carga mecánica a los 45-60 min de ingerir los 15 g de colágeno para absorber los aminoácidos. Los 4 min de voz eliminan la voz opaca/gangosa antes de atender a tu primer paciente.',
+            qHow: '6 min de movilidad/cuerda + 60s Lip Trills/M + 60s Pinza Nasal + 90s Lápiz en premolares + 20s inhalando Café, Limón, Eugenol y Eucalipto.',
+            qWhen: `A las ${this.addMinutesToTime(w, 80)} (55 minutos después del Super-Shot).`,
+            qDose: '6 min movilidad + 3.5 min foniatría práctica + 80s olfato neurogénico.',
+            qWhyOption: 'Sincroniza el pico bioquímico de Baar con tu calentamiento vocal diario.'
+          },
+          {
+            id: 'step6_breakfast_oral',
+            timeLabel: `${this.addMinutesToTime(w, 90)} (T+90 min)`,
+            badge: `Paso 6 · Desayuno Anabólico, ${ctx.isBoronActive ? 'Boro Activo' : 'Descanso Boro'}, Nootrópicos y Agua #2 (500 ml)`,
+            title: `6. Desayuno: 1 Huevo + 200ml Claras + Espinaca + ${adj.morningTortillas} Tortillas + Café/Matcha con L-Teanina, Melena de León ${ctx.isBoronActive ? 'y Boro (6-9mg)' : ''} + Cepillado Pro-NO`,
+            summary: `Respeta los 90 min de adenosina. Toma 500 ml de agua, come proteína con colina, activa foco sin temblor y mastica chicle de Xilitol 100%.`,
+            timerSec: 120,
+            timerLabel: 'Cepillado Dental + Hilo (Prohibido Enjuague con Clorhexidina/Alcohol)',
+            waterAdd: 500,
+            phonetic: `Paso seis: Desayuno anabólico y neuro-cognitivo a los noventa minutos de haber despertado. Primero bebe quinientos mililitros de agua pura. En el sartén a fuego medio, cocina cien gramos de espinaca con un huevo entero y doscientos mililitros de claras pasteurizadas San Juan, acompañados de ${adj.morningTortillas} tortillas de maíz. Ahora sí, a los noventa minutos de despertar para que no te dé sueño en la tarde, toma tu taza de café negro filtrado en papel o té Matcha junto con una cápsula de doscientos miligramos de L-Teanina para que tus manos tengan pulso de cirujano sin ningún temblor, quinientos miligramos de extracto puro de Melena de León para la memoria clínica y quinientos miligramos de Urolitina A o treinta gramos de nueces. ${ctx.isBoronActive ? 'Además, como hoy es ' + ctx.dayName + ', toma tu cápsula de seis a nueve miligramos de Boro elemental junto con el desayuno para bajar la proteína S H B G y aumentar un veintiocho por ciento tu testosterona libre.' : 'Como hoy es fin de semana, hoy toca descanso programado del suplemento de Boro para mantener tus receptores sensibles.'} Al terminar de desayunar: usa hilo dental, cepilla tus dientes con pasta con flúor y mastica un chicle de Xilitol al cien por ciento. Recuerda que está prohibido usar enjuagues con clorhexidina o alcohol porque matan las bacterias buenas de tu lengua que producen óxido nítrico para tus venas y tus erecciones.`,
+            qWhat: 'Desayuno rico en albúmina, leucina y colina + sinergia Cafeína/L-Teanina/Melena de León + Boro ciclado + Higiene bucal preservadora de óxido nítrico (Joshipura 2020).',
+            qWhy: 'Esperar 90 min limpia la adenosina cerebral; la L-Teanina (200 mg) anula el temblor fino por cafeína; el Boro (6-9 mg lun-vie) eleva +28% la testosterona libre en 7 días (Naghii et al., 2011); y evitar colutorios bactericidas protege la vía enterosalival de óxido nítrico.',
+            qHow: 'Beber 500 ml de agua -> Comer espinacas con huevo/claras y tortillas -> Tomar café/Matcha con cápsulas -> Hilo dental + cepillado + chicle Xilitol 100%.',
+            qWhen: `A las ${this.addMinutesToTime(w, 90)}.`,
+            qDose: `500 ml agua + 1 huevo + 200 ml claras + 100 g espinaca + ${adj.morningTortillas} tortillas + 200 mg L-Teanina + 500 mg Melena de León + ${ctx.isBoronActive ? '6-9 mg Boro' : '0 mg Boro hoy'}.`,
+            qWhyOption: 'Te da energía limpia de 8 horas en el consultorio, testosterona libre alta y pulso quirúrgico firme.'
+          },
+          {
+            id: 'step7_gym_smoothie',
+            timeLabel: isAM ? '09:15 AM Plátano · 10:00 AM Gym · 11:15 AM Licuado' : '06:15 PM Plátano · 07:00 PM Gym · 08:15 PM Licuado',
+            badge: `Paso 7 · Turno Gym ${isAM ? '10:00 AM' : '07:00 PM'}, Regla Ottaviani y Agua #3 (900 ml)`,
+            title: `7. Plátano a Mordidas (-45 min) + Sesión PPL en Estiramiento (con 600ml Agua) + Super-Licuado SIN Plátano (+300ml Lala 100)`,
+            summary: `Comer 1 plátano 45m antes. En el Gym beber 600ml agua. Post-entreno: 300ml Lala 100 + 150ml claras/Whey + 5g Creatina + 5g Maca Negra + 10g Cacao + 60g Arándanos + ${adj.oatsGrams}g Avena.`,
+            timerSec: 30,
+            timerLabel: 'Preparación de Super-Licuado Sin Plátano (30s)',
+            waterAdd: 900,
+            phonetic: `Paso siete: Bloque de entrenamiento biomecánico y Super-Licuado anabólico. Cuarenta y cinco minutos antes de empezar tus pesas, cómete un plátano entero a mordidas. Recuerda la regla científica del Doctor Ottaviani dos mil veintitrés: jamás metas el plátano a la licuadora ni lo comas junto con los arándanos y el cacao porque la enzima polifenol oxidasa del plátano destruye el ochenta y cuatro por ciento de los antioxidantes vasodilatadores. Durante tu entrenamiento en el gimnasio bebe seiscientos mililitros de agua con una pizca de sal y respeta de uno a tres segundos de pausa abajo en cada ejercicio. Quince minutos después de terminar tu última serie, pon en la licuadora trescientos mililitros de leche Lala cien sin lactosa proteína, ciento cincuenta mililitros de claras pasteurizadas o una medida de proteína Whey Isolate, cinco gramos de creatina monohidratada Creapure, cinco gramos de maca negra gelatinizada para potencia sexual y dopamina, diez gramos de cacao puro al cien por ciento sin azúcar, sesenta gramos de arándanos azules para proteger tu retina y ${adj.oatsGrams} gramos de avena. Licúa treinta segundos y bébelo.`,
+            qWhat: 'Separación de 45 min para el plátano + Entrenamiento PPL de hipertrofia mediada por estiramiento + Super-Licuado post-entreno en ventana GLUT-4.',
+            qWhy: 'Separar el plátano 45 min antes evita que su enzima PPO (3,258 KU/100g) destruya el 84% de la (-)-epicatequina del cacao y los arándanos en el vaso y en el estómago (Ottaviani et al., Food & Function, 2023). La Maca Negra incrementa vigor y conteo espermático desde la primera semana sin alterar hormonas ni próstata (Gonzales 2006).',
+            qHow: 'Plátano a mordidas (-45m) -> Gym PPL bebiendo 600 ml de agua -> Licuado de 7 ingredientes sin plátano (+15m post-gym).',
+            qWhen: isAM ? 'Plátano: 09:15 AM | Gym: 10:00 AM | Super-Licuado: 11:15 AM.' : 'Plátano: 06:15 PM | Gym: 07:00 PM | Super-Licuado: 08:15 PM.',
+            qDose: `600 ml agua en gym + 300 ml Lala 100 + 150 ml claras/Whey + 5 g Creatina Creapure® + 5 g Maca Negra + 10 g Cacao + 60 g Arándanos + ${adj.oatsGrams} g Avena.`,
+            qWhyOption: 'Mete todos los nutrientes directo al músculo aprovechando los transportadores GLUT-4 sin perder un solo miligramo de flavanoles.'
+          },
+          {
+            id: 'step8_midday_clinic',
+            timeLabel: '01:30 PM (Pausa Clínica de 3 Minutos)',
+            badge: 'Paso 8 · Reaplicación Bloqueador #2, Vista Dental, Kegel y Agua #4 (500 ml)',
+            title: '8. Pausa de Mediodía: Reaplicar Bloqueador Eucerin FPS 50+ + Enfoque Ocular (15cm ↔ 6m por 60s) + Kegel (3×10) + 500 ml Agua',
+            summary: 'Antes de salir al sol de la tarde: retoca protector solar,pon Dexpantenol en labios, relaja el músculo ciliar de tus ojos y entrena suelo pélvico.',
+            timerSec: 60,
+            timerLabel: 'Rehabilitación Ocular para Dentistas 15cm ↔ 6m (60s)',
+            waterAdd: 500,
+            phonetic: 'Paso ocho: Pausa clínica de tres minutos a la una y media de la tarde. Primero: bebe quinientos mililitros de agua pura para mantener tus cuerdas vocales hidratadas. Segundo: como ya pasaron varias horas desde la mañana y vas a salir a la luz del sol a la hora de la comida, lávate las manos y aplica una capa ligera de retoque de tu bloqueador Eucerin Oil Control FPS cincuenta más en cara y cuello, y pon un toque de Dexpantenol al cinco por ciento si sientes los labios secos por hablar con pacientes. Tercero: rehabilitemos tus ojos cansados de enfocar dentro de la boca; sostén la punta de un explorador dental o tu dedo pulgar a quince centímetros de tu nariz, míralo con total nitidez durante tres segundos, y ahora levanta la vista hacia un objeto a seis metros de distancia al fondo del consultorio durante tres segundos; alterna así durante un minuto para quitar el espasmo del músculo ciliar. Cuarto: ahí mismo sentado en tu banquillo dental, realiza tus tres series de diez contracciones de suelo pélvico Kegel: aprieta tres segundos los músculos entre los testículos y el periné como si detuvieras la orina, y luego relaja cinco segundos.',
+            qWhat: 'Retoque fotoprotector de mediodía + gimnasia acomodativa ocular para odontólogos + entrenamiento de músculos bulbocavernoso e isquiocavernoso + hidratación.',
+            qWhy: 'Los filtros solares pierden eficacia tras 4-5 horas de secreción sebácea; reaplicar a la 1:30 PM te blinda contra la radiación UV máxima de las 2:00-4:00 PM. Alternar el foco entre 15 cm y 6 m relaja el espasmo del cristalino.',
+            qHow: '1° Beber 500 ml agua -> 2° Retoque Eucerin Oil Control FPS 50+ y labios -> 3° 60s alternando vista 15 cm (3s) y 6 m (3s) -> 4° 3 series de 10 Kegels (3s apretar + 5s relajar).',
+            qWhen: 'A la 01:30 PM entre pacientes antes de salir a comer.',
+            qDose: '500 ml agua + 1 capa ligera Eucerin FPS 50+ + 60s rehabilitación ocular + 30 repeticiones Kegel.',
+            qWhyOption: 'Aprovecha un hueco muerto de 3 minutos en el consultorio para proteger tu piel, tu vista y tu potencia sexual.'
+          },
+          {
+            id: 'step9_lunch_sulforaphane',
+            timeLabel: '02:45 PM Escudo · 03:00 PM Comida Fuerte',
+            badge: 'Paso 9 · Sulforafano (>4x), Blindaje Macular y Agua #5 (500 ml)',
+            title: `9. Comida Fuerte: Escudo Vinagre/Chía (02:45 PM) + 150g Brócoli con 1g Polvo de Semilla de Mostaza + ${adj.proteinGrams}g Pollo/Pescado + ${adj.riceGrams}g Arroz Enfriado + Vitaminas`,
+            summary: `02:45 PM: 250ml agua con vinagre/chía (+ enjuague 5s). 03:00 PM: Brócoli con mostaza en el plato + proteína + arroz enfriado + D3/K2/Omega-3/Luteína + 250ml agua.`,
+            timerSec: 240,
+            timerLabel: 'Cocción Exacta de Brócoli al Vapor (4 Minutos)',
+            waterAdd: 500,
+            phonetic: `Paso nueve: Comida fuerte de las tres de la tarde para crecimiento muscular, limpieza hepática y protección de tus ojos. Quince minutos antes de comer, a las dos cuarenta y cinco, bebe doscientos cincuenta mililitros de agua con quince mililitros de vinagre de sidra de manzana y doce gramos de semillas de chía previamente remojadas, seguido inmediatamente de un enjuague bucal de cinco segundos con agua pura. A las tres de la tarde, empieza comiendo ciento cincuenta gramos de brócoli cocido al vapor durante cuatro minutos al que le vas a espolvorear encima, ya servido en tu plato y nunca mientras hierve, un cuarto de cucharadita que es un gramo de polvo de semilla de mostaza marrón. La enzima mirosinasa de la mostaza multiplica por más de cuatro veces el sulforafano que desintoxica tu hígado según Okunade dos mil dieciocho. Después come tus ${adj.proteinGrams} gramos de pechuga de pollo, pescado blanco o salmón a la plancha y al final tus ${adj.riceGrams} gramos de arroz blanco que enfriaste antes en el refrigerador. A mitad de la comida toma tus cápsulas liposolubles: ${adj.vitDUI} unidades de Vitamina D tres, cien microgramos de Vitamina K dos, dos gramos de Omega tres con sello IFOS, quince miligramos de Zinc y veinte miligramos de Luteína con cuatro miligramos de Zeaxantina que filtran la luz azul de tu lámpara de fotocurado dental. Al terminar mastica un chicle de Xilitol.`,
+            qWhat: 'Escudo glucémico + Rescate enzimático de sulforafano con semilla de mostaza + Almidón resistente tipo 3 + Suplementación liposoluble macular y endocrina.',
+            qWhy: 'Cocer el brócoli destruye su enzima mirosinasa reduciendo el sulforafano al 3.4%, pero espolvorear 1 g de polvo de semilla de mostaza en el plato restaura la enzima y cuadruplica (>4x) el sulforafano biodisponible (Okunade et al., 2018).',
+            qHow: '02:45 PM: Escudo + enjuague 5s. 03:00 PM: Comer en orden 1° Brócoli con mostaza -> 2° Pollo/Pescado + Cápsulas -> 3° Arroz enfriado -> Chicle Xilitol.',
+            qWhen: 'Escudo: 02:45 PM | Comida Fuerte: 03:00 PM.',
+            qDose: `500 ml agua total + 15 ml vinagre + 12 g chía + 150 g brócoli + 1 g semilla de mostaza + ${adj.proteinGrams} g proteína + ${adj.riceGrams} g arroz enfriado + D3 ${adj.vitDUI} UI + K2 100 µg + Omega-3 IFOS 2 g + Luteína 20 mg / Zeaxantina 4 mg + Zinc 15 mg.`,
+            qWhyOption: 'Absorción máxima de vitaminas liposolubles y desintoxicación hepática Fase II comprobada.'
+          },
+          {
+            id: 'step10_afternoon_mewing',
+            timeLabel: '06:00 PM (Cierre de Hidratación Fuerte y Simetría Facial)',
+            badge: 'Paso 10 · Postura Mewing, Masetero y Agua #6 (500 ml)',
+            title: '10. Hidratación Vespertina (500 ml Agua) + Postura Lingual Mewing + 10 min Chicle de Xilitol en Lado Menos Marcado',
+            summary: 'Toma tus últimos 500 ml fuertes de agua libre del día, pega toda la lengua al paladar respirando por la nariz y equilibra tu mandíbula.',
+            timerSec: 600,
+            timerLabel: 'Masticación Unilateral con Chicle de Xilitol (10 Minutos)',
+            waterAdd: 500,
+            phonetic: 'Paso diez: A las seis de la tarde tomamos tus últimos quinientos mililitros fuertes de agua pura del día para llegar a tu meta de tres litros y medio sin llenar tu estómago de líquido tarde en la noche. Aprovecha estos diez minutos para tu simetría craneofacial: primero mírate al espejo y ubica cuál de los dos lados de tu mandíbula tiene el músculo masetero ligeramente menos desarrollado; mastica un chicle de Xilitol al cien por ciento únicamente de ese lado durante diez minutos para igualar tu simetría facial. Segundo: verifica tu postura Mewing; pega no solo la punta, sino también la parte de atrás de tu lengua contra el techo del paladar, cierra los labios sin apretar los dientes y respira por la nariz. Notarás en el espejo cómo al subir la parte trasera de la lengua se levanta de inmediato la piel debajo de tu barbilla desapareciendo cualquier rastro de papada.',
+            qWhat: 'Cierre de hidratación diurna + ortopedia postural lingual (Mewing) + entrenamiento compensatorio del músculo masetero.',
+            qWhy: 'Adosar el tercio posterior de la lengua al paladar eleva el hueso hioides y tensa el músculo milohioideo definiendo el ángulo cervicomandibular al instante.',
+            qHow: 'Beber 500 ml de agua -> Masticar chicle de Xilitol 10 min del lado masetero menos voluminoso -> Mantener lengua pegada al paladar.',
+            qWhen: 'A las 06:00 PM en el consultorio o camino al gimnasio.',
+            qDose: '500 ml de agua + 10 minutos de masticación unilateral controlada.',
+            qWhyOption: 'Completa tu hidratación a tiempo para no levantarte a orinar en la madrugada ni favorecer el reflujo nocturno.'
+          },
+          {
+            id: 'step11_family_dinner_spu',
+            timeLabel: '10:15 PM Escudo · 10:30 PM Cena Familiar + SPU',
+            badge: 'Paso 11 · Cena Familiar Mitigada (-52% Glucosa) y Agua #7 (250 ml)',
+            title: `11. Cena Familiar: Escudo Vinagre/Chía (10:15 PM) + Orden Estricto (Fibra → Proteína → Máx ${adj.dinnerTortillas} Tortillas) + 10 min Flexiones de Sóleo (SPU) + Caminata`,
+            summary: 'Cero lácteos, cero quesos grasos y cero frituras. Al terminar de cenar, haz 10 min de flexiones de sóleo sentado en la sobremesa.',
+            timerSec: 600,
+            timerLabel: 'Flexiones del Músculo Sóleo Sentado en Sobremesa (10 Minutos)',
+            waterAdd: 250,
+            phonetic: `Paso once: Cena familiar nocturna entre las diez y las once de la noche. Exactamente quince minutos antes de sentarte a cenar, bebe tu escudo de doscientos cincuenta mililitros de agua con quince mililitros de vinagre de manzana y doce gramos de chía hidratada, y haz cinco segundos de enjuague bucal con agua simple. En la mesa familiar aplica la regla de oro sin excepciones: durante los primeros cinco minutos come únicamente fibra como nopales asados, pico de gallo, lechuga o verduras del caldo. Después come de doscientos a doscientos cincuenta gramos de proteína magra como carne asada limpia de grasa o pechuga de pollo. Al final come máximo ${adj.dinnerTortillas} tortillas de maíz al comal. No toques quesos fundidos, crema, chorizo ni frituras en la noche para que tu vesícula biliar esté en paz y no suba ácido ni pepsina a tus cuerdas vocales. En cuanto des el último bocado, sin levantarte de la silla mientras platicas con tu familia, mantén las puntas de los pies en el piso y levanta y suelta los talones repetidamente cada dos segundos durante diez minutos. Este ejercicio del Doctor Hamilton consume la mitad del azúcar y la grasa de tu cena directamente desde tu sangre. Al terminar haz una caminata suave de diez minutos.`,
+            qWhat: 'Escudo de mucílago y ácido acético + Secuencia de macronutrientes libre de grasas colecistoquinéticas + Flexiones del Músculo Sóleo Sentado (Hamilton et al., iScience, 2022).',
+            qWhy: 'El escudo reduce >30% el pico glucémico e insulínico; eliminar grasas y lácteos nocturnos evita la contracción espasmódica vesicular y el reflujo laringofaríngeo (LPR); y 10 min de SPU sentado reducen un 52% la excursión de glucosa y VLDL en sangre.',
+            qHow: '10:15 PM: Escudo + enjuague 5s. 10:30 PM: 1° Fibra -> 2° Proteína magra -> 3° Tortillas topadas. 10:50 PM: 10 min de elevación continua de talones sentado con rodillas a 90° + 10 min caminata.',
+            qWhen: 'De 10:15 PM a 11:10 PM.',
+            qDose: `250 ml agua del escudo + 15 ml vinagre + 12 g chía + 200-250 g proteína magra + máx ${adj.dinnerTortillas} tortillas + 10 min SPU (~400 repeticiones).`,
+            qWhyOption: 'Transforma una cena pesada a las 10:30 PM en una comida limpia que nutre tus músculos sin engordar tu cintura ni dañar tu hígado.'
+          },
+          {
+            id: 'step12_night_skincycling_sleep',
+            timeLabel: '11:15 PM Piel Nocturna · 11:45 PM Dormir Lado Izquierdo',
+            badge: `Paso 12 · ${ctx.isRetinoidNight ? 'NOCHE DE TRETINOÍNA (Espera 20m)' : 'NOCHE DE RECUPERACIÓN'} + Apagado Neuro-Hepático`,
+            title: `12. Lavado CeraVe + ${ctx.isRetinoidNight ? 'Espera 20m Piel Seca + Tretinoína 0.025%' : 'Hydro Boost + Dexpantenol 5%'} + Magnesio/Glicina/Taurina + Cinta Labial + Lado Izquierdo`,
+            summary: 'Higiene dental nocturna + lavado nasal + rutina facial exacta de esta noche + bebida neuro-hepática en 150 ml agua + dormir del lado izquierdo.',
+            timerSec: ctx.isRetinoidNight ? 1200 : 60,
+            timerLabel: ctx.isRetinoidNight ? 'Espera Obligatoria Piel 100% Seca Pre-Tretinoína (20 Minutos)' : 'Aplicación Nocturna de Ácido Hialurónico y Dexpantenol (60s)',
+            waterAdd: 150,
+            phonetic: `Paso doce: Cierre nocturno dermatológico y apagado neuro-hepático para un sueño profundo y reparador. Primero: pasa el hilo dental, cepilla tus dientes y haz tu segundo lavado nasal del día durante diez segundos en cada fosa nasal para barrer el polvo del día. Segundo: lava tu cara durante treinta segundos con tu CeraVe Limpiador Hidratante botella verde y sécala a toques con una toalla limpia. ${ctx.isRetinoidNight ? 'Atención Doctor: como hoy es ' + ctx.dayName + ', hoy es Noche de Retinoide. Pon el cronómetro de veinte minutos y no te pongas absolutamente nada en la cara durante esos veinte minutos: si pones el ácido retinoico con la piel húmeda penetra de golpe y te quema o irrita. Mientras pasan esos veinte minutos, prepara tu bebida de sueño. Cuando suene el cronómetro de veinte minutos, pon primero un poco de Dexpantenol al cinco por ciento en tus labios, en las comisuras de la boca y alrededor de los ojos para proteger esas zonas delicadas; luego toma una gotita del tamaño de un chícharo de crema de Tretinoína al cero punto cero veinticinco por ciento, repártela en frente, pómulos, nariz y mentón sin tocar párpados ni labios, y cinco minutos después pon una capa de crema hidratante encima.' : 'Como hoy es ' + ctx.dayName + ', hoy es Noche de Recuperación de Barrera: con la piel todavía ligeramente húmeda aplica tu gel de Ácido Hialurónico Hydro Boost en toda la cara y sella el contorno de ojos, las comisuras y los labios con una capa generosa de pomada de Dexpantenol al cinco por ciento Bepanthen.'} Si usas Minoxidil al cinco por ciento para cabello o cola de cejas, aplícalo ahora y lávate las manos. Tercero: en solo ciento cincuenta mililitros de agua tibia disuelve tres gramos de Glicina pura, que sabe ligeramente dulce, junto con dos gramos de L-Taurina y toma tus cuatrocientos miligramos de Magnesio L-Treonato o Bisglicinato. Esto baja la temperatura interna de tu cerebro y regenera tu hígado sin usar Ashwagandha y sin crear adicción. Finalmente, pega una tirita vertical de cinta Micropore en el centro de tus labios para respirar toda la noche por la nariz y acuéstate sobre tu lado izquierdo para que el ácido del estómago jamás suba a tu garganta. Que descanses Doctor.`,
+            qWhat: 'Lavado facial nocturno + Skin Cycling automatizado según el día + Lavado nasal + Complejo Magnesio/Glicina/Taurina + Sellado labial con cinta Micropore + Decúbito lateral izquierdo.',
+            qWhy: 'Esperar 20 min con la piel seca antes de la Tretinoína evita dermatitis por retinoides. La Glicina (3 g) activa receptores NMDA en el núcleo supraquiasmático bajando la temperatura corporal central y acortando la latencia de sueño profundo sin dependencia (Kawai et al., 2015). Dormir sobre el lado izquierdo con cinta labial erradica el reflujo nocturno y los gargajos matutinos (Kaltenbach et al., 2006).',
+            qHow: ctx.isRetinoidNight ? 'Lavar con CeraVe Verde -> Secar y esperar 20 min exactos -> Proteger labios/ojos con Dexpantenol -> Aplicar 1 chícharo (0.25g) de Tretinoína -> Sellar con hidratante.' : 'Lavar con CeraVe Verde -> Aplicar Hydro Boost en piel húmeda -> Sellar labios y contorno ocular con Dexpantenol 5%.',
+            qWhen: 'A las 11:15 PM (habiendo esperado 60 a 90 minutos desde la cena).',
+            qDose: `${ctx.isRetinoidNight ? '0.25 g Tretinoína (tras 20m espera)' : 'Hydro Boost + Dexpantenol 5%'} + 400 mg Magnesio elemental + 3 g Glicina + 2 g Taurina en 150 ml agua.`,
+            qWhyOption: 'Te despiertas al día siguiente con la piel renovada, los labios intactos, la garganta limpia sin flemas y la mente al 100%.'
+          }
+        ];
+      },
+
+      renderDailyBlocks() {
+        const blocks = this.getDailyBlocksData();
+        const dayKey = `day_${this.state.programDay}`;
+        const completedMap = this.state.completedBlocksByDay[dayKey] || {};
+        const container = document.getElementById('daily-blocks-container');
+
+        let completedCount = 0;
+        blocks.forEach(b => { if (completedMap[b.id]) completedCount++; });
+        document.getElementById('daily-completion-pill').textContent = `${completedCount} / ${blocks.length} Pasos Completados`;
+
+        container.innerHTML = blocks.map(b => {
+          const isDone = !!completedMap[b.id];
+          return `
+            <article class="card ${isDone ? 'card-done' : ''}">
+              <div class="card-header">
+                <button class="check-btn ${isDone ? 'active' : ''}" onclick="App.toggleBlockDone('${b.id}', ${b.waterAdd || 0})">✓</button>
+
+                <div style="flex-grow:1; cursor:pointer;" onclick="App.toggleAccordion('acc-${b.id}')">
+                  <div style="display:flex; flex-wrap:wrap; gap:5px; align-items:center;">
+                    <span class="badge badge-gold mono">${b.timeLabel}</span>
+                    <span class="badge badge-cyan mono">${b.badge}</span>
+                    ${b.waterAdd > 0 ? `<span class="badge badge-emerald mono">💧 +${b.waterAdd} ml Agua</span>` : ''}
+                  </div>
+                  <h3 class="card-title ${isDone ? 'done' : ''}">${b.title}</h3>
+                  <p class="card-summary">${b.summary}</p>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:6px; align-items:center;">
+                  <button class="btn-gold" style="padding:6px 9px; font-size:11px;" title="Escuchar a tu Entrenadora" onclick="App.speakText(\`${b.phonetic}\`)">
+                    🔊 Voz
+                  </button>
+                  <button class="btn-icon" style="width:32px; height:28px; color:var(--text-muted);" onclick="App.toggleAccordion('acc-${b.id}')">▼</button>
+                </div>
+              </div>
+
+              <div id="acc-${b.id}" class="accordion-body hidden">
+                <div style="display:flex; flex-wrap:wrap; gap:7px; padding-bottom:10px; border-bottom:1px solid var(--border); margin-bottom:10px;">
+                  <button class="btn-emerald" onclick="App.startCountdown(${b.timerSec}, '${b.timerLabel}', '${b.title}')">
+                    ⏱️ Iniciar Cronómetro (${b.timerSec >= 60 ? (b.timerSec / 60) + ' min' : b.timerSec + 's'})
+                  </button>
+                  <button class="btn-gold" onclick="App.speakText(\`${b.phonetic}\`)">
+                    👩🏻‍⚕️ Escuchar Explicación Paso a Paso con Ejemplos
+                  </button>
+                  ${b.waterAdd > 0 ? `
+                    <button class="btn-cyan" onclick="App.addWater(${b.waterAdd})">
+                      💧 Registrar +${b.waterAdd} ml de Agua
+                    </button>
+                  ` : ''}
+                </div>
+
+                <!-- Guion escrito completo de la entrenadora para leer o escuchar -->
+                <div class="step-script-box">
+                  <span class="mono" style="font-size:10px; font-weight:800; color:var(--gold); display:block; margin-bottom:3px;">
+                    🎙️ GUION SEGUNDO A SEGUNDO DE TU ENTRENADORA (CON EJEMPLOS):
+                  </span>
+                  "${b.phonetic}"
+                </div>
+
+                <div class="q-grid">
+                  <div class="q-box"><span class="q-label mono" style="color:var(--gold);">1. ¿Qué hacer exactamente?</span>${b.qWhat}</div>
+                  <div class="q-box"><span class="q-label mono" style="color:var(--emerald);">2. ¿Por qué funciona (Nivel 1A)?</span>${b.qWhy}</div>
+                  <div class="q-box"><span class="q-label mono" style="color:var(--cyan);">3. ¿Cómo y hacia qué dirección?</span>${b.qHow}</div>
+                  <div class="q-box"><span class="q-label mono" style="color:var(--purple);">4. ¿Cuándo, dónde y a qué hora?</span>${b.qWhen}</div>
+                  <div class="q-box"><span class="q-label mono" style="color:var(--rose);">5. ¿Cuántos segundos / gramos / ml?</span>${b.qDose}</div>
+                  <div class="q-box"><span class="q-label mono" style="color:#FDE68A;">6. ¿Por qué esta opción y no otra?</span>${b.qWhyOption}</div>
+                </div>
+              </div>
+            </article>
+          `;
+        }).join('');
+      },
+
+      toggleBlockDone(blockId, waterAmount) {
+        const dayKey = `day_${this.state.programDay}`;
+        if (!this.state.completedBlocksByDay[dayKey]) {
+          this.state.completedBlocksByDay[dayKey] = {};
+        }
+        const becomingDone = !this.state.completedBlocksByDay[dayKey][blockId];
+        this.state.completedBlocksByDay[dayKey][blockId] = becomingDone;
+
+        // Si el bloque incluye agua y se acaba de marcar como completado, sumamos el agua automáticamente
+        if (waterAmount > 0) {
+          const currW = this.state.waterByDay[dayKey] || 0;
+          this.state.waterByDay[dayKey] = becomingDone
+            ? Math.min(5500, currW + waterAmount)
+            : Math.max(0, currW - waterAmount);
+        }
+
+        ParagonStorage.saveState(this.state);
+        this.renderDailyBlocks();
+        this.renderWaterTracker();
+        this.renderCalendarTab();
+      },
+
+      // -----------------------------------------------------------------------
+      // PESTAÑA 3: CALENDARIO MAESTRO DE 60 DÍAS, SEMANAS Y MESES
+      // -----------------------------------------------------------------------
+      renderCalendarTab() {
+        const pDay = this.state.programDay || 1;
+        const ctx = this.getDayContext();
+        const badge = document.getElementById('calendar-progress-badge');
+        if (badge) badge.textContent = `DÍA ${pDay}/60 · SEM ${ctx.weekNum}/8 · MES ${ctx.monthNum}/2`;
+
+        const buildMonthGrid = (startDay, endDay) => {
+          let html = '';
+          for (let d = startDay; d <= endDay; d++) {
+            const dKey = `day_${d}`;
+            const map = this.state.completedBlocksByDay[dKey] || {};
+            const doneCount = Object.values(map).filter(Boolean).length;
+            const isCurr = (d === pDay);
+            const isComp = doneCount >= 6;
+            html += `
+              <div class="day-cell mono ${isCurr ? 'current' : ''} ${isComp ? 'completed' : ''}" onclick="App.jumpToProgramDay(${d})">
+                <div>D${d}</div>
+                <div style="font-size:9px; opacity:0.85;">${doneCount}/12</div>
+              </div>
+            `;
+          }
+          return html;
+        };
+
+        const g1 = document.getElementById('grid-month-1');
+        const g2 = document.getElementById('grid-month-2');
+        if (g1) g1.innerHTML = buildMonthGrid(1, 30);
+        if (g2) g2.innerHTML = buildMonthGrid(31, 60);
+
+        // Render Weekly Checklist for current Week (1..8)
+        const wkContainer = document.getElementById('weekly-tasks-container');
+        if (wkContainer) {
+          wkContainer.innerHTML = WEEKLY_CHECKLIST.map(item => {
+            const key = `wk_${ctx.weekNum}_${item.id}`;
+            const isDone = !!this.state.weeklyTasksDone[key];
+            return `
+              <div class="q-box" style="margin-bottom:8px; display:flex; align-items:flex-start; gap:10px; ${isDone ? 'border-color:var(--emerald);' : ''}">
+                <button class="check-btn ${isDone ? 'active' : ''}" onclick="App.toggleWeeklyTask('${key}')">✓</button>
+                <div>
+                  <div style="font-weight:800; color:${isDone ? '#34D399' : '#FFFFFF'}; font-size:13px;">[Semana ${ctx.weekNum}] ${item.title}</div>
+                  <div style="color:var(--text-muted); font-size:11.5px; margin-top:2px;">${item.desc}</div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        // Render Monthly / Clinical Milestones
+        const moContainer = document.getElementById('monthly-tasks-container');
+        if (moContainer) {
+          moContainer.innerHTML = MONTHLY_MILESTONES.map(item => {
+            const isDone = !!this.state.monthlyTasksDone[item.id];
+            return `
+              <div class="q-box" style="margin-bottom:8px; display:flex; align-items:flex-start; gap:10px; ${isDone ? 'border-color:var(--emerald);' : ''}">
+                <button class="check-btn ${isDone ? 'active' : ''}" onclick="App.toggleMonthlyTask('${item.id}')">✓</button>
+                <div>
+                  <span class="badge badge-gold mono" style="margin-bottom:3px;">${item.dayRef}</span>
+                  <div style="font-weight:800; color:${isDone ? '#34D399' : '#FFFFFF'}; font-size:13px;">${item.title}</div>
+                  <div style="color:var(--text-muted); font-size:11.5px; margin-top:2px;">${item.desc}</div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      },
+
+      toggleWeeklyTask(key) {
+        this.state.weeklyTasksDone[key] = !this.state.weeklyTasksDone[key];
+        ParagonStorage.saveState(this.state);
+        this.renderCalendarTab();
+      },
+
+      toggleMonthlyTask(id) {
+        this.state.monthlyTasksDone[id] = !this.state.monthlyTasksDone[id];
+        ParagonStorage.saveState(this.state);
+        this.renderCalendarTab();
+      },
+
+      // -----------------------------------------------------------------------
+      // DECODIFICADOR DE CENA Y GIMNASIO PPL
+      // -----------------------------------------------------------------------
+      selectDinnerScenario(key) {
+        this.state.selectedDinnerScenario = key;
+        ParagonStorage.saveState(this.state);
+
+        ['tacos', 'caldo', 'guisado', 'antojitos'].forEach(k => {
+          const btn = document.getElementById(`btn-dinner-${k}`);
+          if (btn) btn.className = (k === key) ? 'btn-gold' : 'btn-dark';
+        });
+
+        const s = DINNER_SCENARIOS[key];
+        document.getElementById('dinner-decoder-output').innerHTML = `
+          <div style="font-weight:800; color:var(--gold); font-size:13px; margin-bottom:6px;">${s.title}</div>
+          <p style="margin:4px 0; color:#34D399;">${s.step1}</p>
+          <p style="margin:4px 0; color:#22D3EE;">${s.step2}</p>
+          <p style="margin:4px 0; color:#F8FAFC;">${s.step3}</p>
+          <p style="margin:8px 0 0 0; padding-top:6px; border-top:1px solid var(--border); color:#FB7185; font-weight:700;">${s.ban}</p>
+        `;
+      },
+
+      selectGymDay(day) {
+        this.state.selectedGymDay = day;
+        ParagonStorage.saveState(this.state);
+
+        ['A', 'B', 'C'].forEach(d => {
+          const btn = document.getElementById(`btn-gym-${d}`);
+          if (btn) btn.className = (d === day) ? 'btn-cyan' : 'btn-dark';
+        });
+
+        this.renderGymExercises(day);
+      },
+
+      renderGymExercises(day) {
+        const list = GYM_DATABASE[day] || [];
+        const container = document.getElementById('gym-exercises-container');
+
+        container.innerHTML = list.map(ex => {
+          const saved = this.state.gymLogs[ex.id] || {
+            weight: ex.defaultWeight,
+            reps: Array(ex.sets).fill(ex.repMin),
+            overloadReady: false
+          };
+
+          const setsInputsHTML = saved.reps.map((r, idx) => `
+            <div class="q-box" style="text-align:center; padding:8px;">
+              <span class="mono" style="font-size:10px; color:var(--text-muted); display:block;">SERIE ${idx + 1}</span>
+              <div style="display:flex; align-items:center; justify-content:center; gap:4px; margin-top:4px;">
+                <input type="number" value="${r}" class="input-num mono" style="width:52px;" onchange="App.updateGymSet('${ex.id}', ${idx}, this.value)" />
+                <span style="font-size:10px; color:var(--text-muted);">reps</span>
+              </div>
+            </div>
+          `).join('');
+
+          return `
+            <article class="card" style="padding:14px; ${saved.overloadReady ? 'border-color: var(--emerald);' : ''}">
+              <div class="row-between">
+                <div>
+                  <span class="badge badge-cyan mono">${ex.muscle}</span>
+                  <h3 class="card-title">${ex.name}</h3>
+                </div>
+                <button class="btn-gold" style="padding:6px 10px;" onclick="App.speakText(\`${ex.phoneticScript}\`)">🔊 Entrenadora</button>
+              </div>
+
+              <div style="display:flex; flex-wrap:wrap; gap:6px; margin:8px 0;">
+                <span class="badge badge-gold mono">${ex.sets} × ${ex.repMin}–${ex.repMax} (${ex.rir})</span>
+                <span class="badge badge-purple mono">Tempo: ${ex.tempo}</span>
+                <span class="badge badge-rose mono">Pausa Abajo: ${ex.stretchSec}s</span>
+                <span class="badge badge-emerald mono">Descanso: ${ex.restSec}s</span>
+              </div>
+
+              <div class="q-box" style="background:#060911; margin-bottom:10px;">
+                <div class="row-between" style="margin-bottom:10px;">
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <span style="font-weight:700;">Carga Actual:</span>
+                    <input type="number" step="0.5" value="${saved.weight}" class="input-num mono" style="width:74px; color:var(--gold);" onchange="App.updateGymWeight('${ex.id}', this.value)" />
+                    <span class="mono" style="color:var(--text-muted);">kg</span>
+                  </div>
+                  <div style="display:flex; gap:6px;">
+                    <button class="btn-rose" onclick="App.startCountdown(${ex.stretchSec}, 'Pausa en Estiramiento (${ex.stretchSec}s)', '${ex.name}')">⏸️ Pausa ${ex.stretchSec}s</button>
+                    <button class="btn-cyan" onclick="App.startCountdown(${ex.restSec}, 'Descanso Entre Series (${ex.restSec}s)', '${ex.name}')">⏱️ Descanso ${ex.restSec}s</button>
+                  </div>
+                </div>
+
+                <div class="grid-4">${setsInputsHTML}</div>
+
+                ${saved.overloadReady ? `
+                  <div class="row-between" style="margin-top:10px; padding:8px 10px; border-radius:9px; background:var(--emerald-bg); border:1px solid var(--emerald);">
+                    <span style="font-weight:800; color:#34D399;">¡Lograste ${ex.repMax} reps en todas las series!</span>
+                    <button class="btn-emerald" onclick="App.applyProgressiveOverload('${ex.id}', ${ex.increment}, ${ex.repMin}, ${ex.sets})">⬆️ Subir +${ex.increment} kg</button>
+                  </div>
+                ` : ''}
+              </div>
+
+              <div class="step-script-box" style="margin-bottom:8px;">
+                <span class="mono" style="font-size:10px; font-weight:800; color:var(--gold); display:block;">👩🏻‍⚕️ EXPLICACIÓN DE TU ENTRENADORA:</span>
+                "${ex.phoneticScript}"
+              </div>
+
+              <div style="font-size:12px; color:#CBD5E1;">
+                <div style="margin-bottom:4px;"><b style="color:#34D399;" class="mono">Evidencia 1A:</b> ${ex.why1A}</div>
+                <div><b style="color:#22D3EE;" class="mono">Ejecución y Vector:</b> ${ex.howVector}</div>
+              </div>
+            </article>
+          `;
+        }).join('');
+      },
+
+      findExerciseById(exId) {
+        for (const d of ['A', 'B', 'C']) {
+          const found = GYM_DATABASE[d].find(e => e.id === exId);
+          if (found) return found;
+        }
+        return null;
+      },
+
+      updateGymWeight(exId, val) {
+        const ex = this.findExerciseById(exId);
+        if (!ex) return;
+        if (!this.state.gymLogs[exId]) {
+          this.state.gymLogs[exId] = { weight: ex.defaultWeight, reps: Array(ex.sets).fill(ex.repMin), overloadReady: false };
+        }
+        this.state.gymLogs[exId].weight = parseFloat(val) || 0;
+        ParagonStorage.saveState(this.state);
+      },
+
+      updateGymSet(exId, setIdx, val) {
+        const ex = this.findExerciseById(exId);
+        if (!ex) return;
+        if (!this.state.gymLogs[exId]) {
+          this.state.gymLogs[exId] = { weight: ex.defaultWeight, reps: Array(ex.sets).fill(ex.repMin), overloadReady: false };
+        }
+        this.state.gymLogs[exId].reps[setIdx] = parseInt(val, 10) || 0;
+        this.state.gymLogs[exId].overloadReady = this.state.gymLogs[exId].reps.every(r => r >= ex.repMax);
+        ParagonStorage.saveState(this.state);
+        this.renderGymExercises(this.state.selectedGymDay);
+      },
+
+      applyProgressiveOverload(exId, inc, repMin, setsCount) {
+        if (!this.state.gymLogs[exId]) return;
+        const newWeight = +(this.state.gymLogs[exId].weight + inc).toFixed(1);
+        this.state.gymLogs[exId].weight = newWeight;
+        this.state.gymLogs[exId].reps = Array(setsCount).fill(repMin);
+        this.state.gymLogs[exId].overloadReady = false;
+        ParagonStorage.saveState(this.state);
+        this.renderGymExercises(this.state.selectedGymDay);
+        this.speakText(`Felicidades Doctor. Hemos aplicado sobrecarga progresiva. Tu nuevo peso para la siguiente sesión es de ${newWeight} kilogramos.`);
+      },
+
+      renderDermaAndVoiceTab() {
+        document.getElementById('derma-cards-container').innerHTML = this.buildGenericCardsHTML(DERMA_CARDS, 'derma');
+        document.getElementById('voice-cards-container').innerHTML = this.buildGenericCardsHTML(VOICE_CARDS, 'voice');
+      },
+
+      buildGenericCardsHTML(cardsArray, prefix) {
+        return cardsArray.map(c => `
+          <article class="card">
+            <div class="card-header" style="cursor:pointer;" onclick="App.toggleAccordion('acc-${prefix}-${c.id}')">
+              <div style="flex-grow:1;">
+                <span class="badge badge-gold mono">${c.badge}</span>
+                <h3 class="card-title">${c.title}</h3>
+                <p class="card-summary">${c.summary}</p>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px;" onclick="event.stopPropagation()">
+                <button class="btn-gold" style="padding:6px 9px; font-size:11px;" onclick="App.speakText(\`${c.phonetic}\`)">🔊 Voz</button>
+                <button class="btn-icon" style="width:32px; height:28px; color:var(--text-muted);" onclick="App.toggleAccordion('acc-${prefix}-${c.id}')">▼</button>
+              </div>
+            </div>
+
+            <div id="acc-${prefix}-${c.id}" class="accordion-body hidden">
+              <div style="display:flex; flex-wrap:wrap; gap:8px; padding-bottom:10px; border-bottom:1px solid var(--border); margin-bottom:10px;">
+                <button class="btn-emerald" onclick="App.startCountdown(${c.timerSec}, '${c.timerLabel}', '${c.title}')">
+                  ⏱️ Iniciar Timer (${c.timerSec >= 60 ? (c.timerSec / 60) + ' min' : c.timerSec + 's'})
+                </button>
+                <button class="btn-gold" onclick="App.speakText(\`${c.phonetic}\`)">
+                  👩🏻‍⚕️ Escuchar Explicación de tu Entrenadora
+                </button>
+              </div>
+              <div class="step-script-box">
+                "${c.phonetic}"
+              </div>
+              <div class="q-grid">
+                <div class="q-box"><span class="q-label mono" style="color:var(--gold);">1. ¿Qué es?</span>${c.qWhat}</div>
+                <div class="q-box"><span class="q-label mono" style="color:var(--emerald);">2. ¿Por qué funciona?</span>${c.qWhy}</div>
+                <div class="q-box"><span class="q-label mono" style="color:var(--cyan);">3. ¿Cómo y dirección?</span>${c.qHow}</div>
+                <div class="q-box"><span class="q-label mono" style="color:var(--purple);">4. ¿Cuándo y dónde?</span>${c.qWhen}</div>
+                <div class="q-box"><span class="q-label mono" style="color:var(--rose);">5. Segundos / Gramos</span>${c.qDose}</div>
+                <div class="q-box"><span class="q-label mono" style="color:#FDE68A;">6. ¿Por qué esta opción?</span>${c.qWhyOption}</div>
+              </div>
+            </div>
+          </article>
+        `).join('');
+      },
+
+      toggleKegelTrainer() {
+        const btn = document.getElementById('btn-kegel-start');
+        const text = document.getElementById('kegel-phase-text');
+        const bar = document.getElementById('kegel-progress-bar');
+
+        if (this.kegelInterval) {
+          clearInterval(this.kegelInterval);
+          this.kegelInterval = null;
+          btn.textContent = '▶️ Iniciar Serie Guiada';
+          text.textContent = 'Entrenador detenido. Listo para iniciar 10 repeticiones (3s contracción + 5s relajación).';
+          bar.style.width = '0%';
+          return;
+        }
+
+        let rep = 1;
+        let secInCycle = 0;
+        btn.textContent = '⏹️ Detener';
+        this.speakText('Iniciando serie guiada de suelo pélvico masculino. Repetición uno: aprieta firme tres segundos.');
+
+        this.kegelInterval = setInterval(() => {
+          if (secInCycle < 3) {
+            text.textContent = `Rep ${rep}/10 · ¡APRIETA FIRME! (Músculo Bulbocavernoso) · ${3 - secInCycle}s`;
+            text.style.color = '#FBBF24';
+            bar.style.background = '#F59E0B';
+            bar.style.width = `${((secInCycle + 1) / 3) * 100}%`;
+            if (secInCycle === 0 && rep > 1) this.speakText(`Repetición ${rep}. Aprieta tres segundos.`);
+          } else {
+            const remRelax = 8 - secInCycle;
+            text.textContent = `Rep ${rep}/10 · KEGEL INVERSO (Relaja el periné e inhala) · ${remRelax}s`;
+            text.style.color = '#34D399';
+            bar.style.background = '#10B981';
+            bar.style.width = `${(remRelax / 5) * 100}%`;
+            if (secInCycle === 3) this.speakText('Suelta y relaja cinco segundos.');
+          }
+
+          secInCycle++;
+          if (secInCycle >= 8) {
+            secInCycle = 0;
+            rep++;
+            if (rep > 10) {
+              clearInterval(this.kegelInterval);
+              this.kegelInterval = null;
+              btn.textContent = '▶️ Iniciar Serie Guiada';
+              text.textContent = '¡Serie de 10 repeticiones completada con éxito!';
+              bar.style.width = '100%';
+              this.speakText('Excelente Doctor, serie de suelo pélvico completada.');
+            }
+          }
+        }, 1000);
+      },
+
+      startCountdown(seconds, title, subtitle) {
+        if (this.activeTimerInterval) clearInterval(this.activeTimerInterval);
+        let remaining = seconds;
+
+        const bar = document.getElementById('floating-timer-bar');
+        const titleEl = document.getElementById('timer-title');
+        const subEl = document.getElementById('timer-subtitle');
+        const disp = document.getElementById('timer-display');
+
+        bar.classList.remove('hidden');
+        titleEl.textContent = '⏱️ ' + title;
+        subEl.textContent = subtitle || '';
+
+        const formatTime = (s) => {
+          const m = Math.floor(s / 60);
+          const rem = s % 60;
+          return `${String(m).padStart(2, '0')}:${String(rem).padStart(2, '0')}`;
+        };
+
+        disp.textContent = formatTime(remaining);
+        this.speakText(`Iniciando cronómetro para ${title}.`);
+
+        this.activeTimerInterval = setInterval(() => {
+          remaining--;
+          disp.textContent = formatTime(Math.max(0, remaining));
+          if (remaining <= 0) {
+            clearInterval(this.activeTimerInterval);
+            this.activeTimerInterval = null;
+            this.speakText(`Tiempo terminado para ${title}. Muy bien hecho Doctor.`);
+            setTimeout(() => { bar.classList.add('hidden'); }, 3000);
+          }
+        }, 1000);
+      },
+
+      stopActiveTimer() {
+        if (this.activeTimerInterval) clearInterval(this.activeTimerInterval);
+        this.activeTimerInterval = null;
+        document.getElementById('floating-timer-bar').classList.add('hidden');
+      },
+
+      toggleGammaEngine() {
+        const badge = document.getElementById('audio-engine-badge');
+        const btnText = document.getElementById('gamma-btn-text');
+
+        if (this.isGammaPlaying) {
+          if (this.pulseInterval) clearInterval(this.pulseInterval);
+          if (this.audioCtx) this.audioCtx.close();
+          this.audioCtx = null;
+          this.isGammaPlaying = false;
+          badge.textContent = 'STANDBY';
+          btnText.textContent = 'Activar Pulso 40 Hz';
+          return;
+        }
+
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        this.audioCtx = new AudioContextClass();
+        this.gammaGain = this.audioCtx.createGain();
+        this.gammaGain.gain.value = 0.14;
+        this.gammaGain.connect(this.audioCtx.destination);
+
+        this.gammaOscL = this.audioCtx.createOscillator();
+        this.gammaOscR = this.audioCtx.createOscillator();
+        this.gammaOscL.type = 'sine';
+        this.gammaOscR.type = 'sine';
+        this.gammaOscL.frequency.value = 200;
+        this.gammaOscR.frequency.value = 240;
+
+        this.gammaOscL.connect(this.gammaGain);
+        this.gammaOscR.connect(this.gammaGain);
+        this.gammaOscL.start();
+        this.gammaOscR.start();
+
+        this.pulseInterval = setInterval(() => {
+          if (!this.audioCtx || !this.isGammaPlaying) return;
+          const now = this.audioCtx.currentTime;
+          const kickOsc = this.audioCtx.createOscillator();
+          const kickGain = this.audioCtx.createGain();
+          kickOsc.frequency.setValueAtTime(95, now);
+          kickOsc.frequency.exponentialRampToValueAtTime(40, now + 0.12);
+          kickGain.gain.setValueAtTime(0.18, now);
+          kickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+          kickOsc.connect(kickGain);
+          kickGain.connect(this.audioCtx.destination);
+          kickOsc.start(now);
+          kickOsc.stop(now + 0.16);
+        }, 650);
+
+        this.isGammaPlaying = true;
+        badge.textContent = 'GAMMA 40 HZ ACTIVO';
+        btnText.textContent = 'Detener Pulso 40 Hz';
+      },
+
+      triggerMilitaryCommand() {
+        const commands = [
+          'Atención Doctor. Estoy contigo en esta serie. Baja contando tres segundos completos, quédate congelado abajo en el estiramiento profundo sin rebotar y saca dos repeticiones más con técnica perfecta.',
+          'Firme Doctor. No acortes el recorrido abajo. La tensión cuando el músculo está estirado es lo que construye el físico que todos respetan.',
+          'Disciplina total hoy. Respira por la nariz, lengua en el paladar, pecho arriba y escápulas retraídas. Termina esta serie con fuerza.',
+          'Cero excusas Doctor. Tres segundos completos en la pausa de pantorrilla abajo. Haz que cada repetición cuente.'
+        ];
+        const chosen = commands[Math.floor(Math.random() * commands.length)];
+        document.getElementById('commander-log').textContent = `"${chosen}"`;
+        this.speakText(chosen);
+      },
+
+      toggleAccordion(id) {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('hidden');
+      },
+
+      switchTab(tabKey) {
+        const tabs = ['daily', 'gym', 'calendar', 'derma', 'biometrics'];
+        tabs.forEach(t => {
+          const sec = document.getElementById(`tab-${t}`);
+          const nav = document.getElementById(`nav-${t}`);
+          if (t === tabKey) {
+            if (sec) sec.classList.remove('hidden');
+            if (nav) nav.className = 'nav-item active';
+          } else {
+            if (sec) sec.classList.add('hidden');
+            if (nav) nav.className = 'nav-item';
+          }
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
+
+      exportBackupJSON() {
+        const dataStr = JSON.stringify(this.state, null, 2);
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(dataStr).catch(() => {});
+        }
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `paragon_v2_dia_${this.state.programDay}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        this.speakText('Respaldo completo guardado y descargado con éxito.');
+      },
+
+      importBackupPrompt() {
+        const raw = prompt('Pega aquí tu código JSON de respaldo:');
+        if (!raw) return;
+        try {
+          const parsed = JSON.parse(raw);
+          this.state = Object.assign({}, this.getDefaultState(), parsed);
+          ParagonStorage.saveState(this.state);
+          this.init();
+          this.speakText('Todo tu progreso ha sido restaurado al cien por ciento.');
+        } catch (e) {
+          alert('El formato JSON no es válido.');
+        }
+      }
+    };
+
+    window.addEventListener('DOMContentLoaded', () => App.init());
+  </script>
+</body>
+</html>
